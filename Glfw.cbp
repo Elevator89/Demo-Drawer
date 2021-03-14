@@ -32,23 +32,33 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 			<Add directory="C:/Program Files (x86)/GLFW/include" />
-			<Add directory="C:/ProgramFilesNoSpace/glfw-3.3.3/deps" />
+			<Add directory="C:/Program Files (x86)/glew/include" />
 		</Compiler>
 		<Linker>
+			<Add library="libglew32.a" />
 			<Add library="glfw3" />
 			<Add library="winmm" />
 			<Add library="gdi32" />
 			<Add library="glu32" />
 			<Add library="opengl32" />
 			<Add directory="C:/Program Files (x86)/GLFW/lib" />
+			<Add directory="C:/Program Files (x86)/glew/lib" />
 		</Linker>
-		<Unit filename="glad_gl.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="main.cpp" />
-		<Unit filename="simple.fsh" />
-		<Unit filename="simple.vsh" />
+		<Unit filename="simple.fsh">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="simple.vsh">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="tex.fsh">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="tex.vsh">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
 		<Extensions>
+			<editor_config active="1" use_tabs="1" tab_indents="1" tab_width="4" indent="4" eol_mode="0" />
 			<lib_finder disable_auto="1" />
 		</Extensions>
 	</Project>
