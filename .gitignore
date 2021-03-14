@@ -1,0 +1,55 @@
+# openFrameworks
+[Bb]in/*
+![Bb]in/data/
+[Bb]uild/
+[Oo]bj/
+[Dd]ebug*/
+[Rr]elease*/
+
+*.mode*
+*.app/
+*.pyc
+*.log
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+#*.obj #it's a format for models. Don't ignore!
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# Code::Blocks
+
+*.depend
+*.layout
+*.cscope_file_list
+
+# Windows
+
+# Windows image file caches
+Thumbs.db
+
+# Folder config file
+Desktop.ini
