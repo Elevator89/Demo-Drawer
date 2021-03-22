@@ -34,7 +34,7 @@ int main()
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
 	// Create a GLFWwindow object that we can use for GLFW's functions
-	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "LearnOpenGL", nullptr, nullptr);
+	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Texture streaming demo", nullptr, nullptr);
 	glfwMakeContextCurrent(window);
 
 	// Set the required callback functions
@@ -49,8 +49,8 @@ int main()
 	glViewport(0, 0, WIDTH, HEIGHT);
 
 	// Shaders
-	std::string vertex_shader_str = GetFileContents("tex.vsh");
-	std::string fragment_shader_str = GetFileContents("tex.fsh");
+	std::string vertex_shader_str = GetFileContents("shaders/tex.vs");
+	std::string fragment_shader_str = GetFileContents("shaders/tex.frag");
 
 	const char* vertex_shader_text = vertex_shader_str.c_str();
 	const char* fragment_shader_text = fragment_shader_str.c_str();

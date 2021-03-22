@@ -13,6 +13,7 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
+					<Add directory="src/" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
@@ -22,6 +23,7 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add directory="src/" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -44,19 +46,11 @@
 			<Add directory="C:/Program Files (x86)/GLFW/lib" />
 			<Add directory="C:/Program Files (x86)/glew/lib" />
 		</Linker>
-		<Unit filename="main.cpp" />
-		<Unit filename="simple.fsh">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
-		<Unit filename="simple.vsh">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
-		<Unit filename="tex.fsh">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
-		<Unit filename="tex.vsh">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
+		<Unit filename="shaders/simple.frag" />
+		<Unit filename="shaders/simple.vs" />
+		<Unit filename="shaders/tex.frag" />
+		<Unit filename="shaders/tex.vs" />
+		<Unit filename="src/main.cpp" />
 		<Extensions>
 			<editor_config active="1" use_tabs="1" tab_indents="1" tab_width="4" indent="4" eol_mode="0" />
 			<lib_finder disable_auto="1" />
