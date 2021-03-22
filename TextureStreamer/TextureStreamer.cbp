@@ -50,6 +50,8 @@
 		<Unit filename="shaders/simple.vs" />
 		<Unit filename="shaders/tex.frag" />
 		<Unit filename="shaders/tex.vs" />
+		<Unit filename="src/Generator.cpp" />
+		<Unit filename="src/Generator.h" />
 		<Unit filename="src/main.cpp" />
 		<Extensions>
 			<editor_config active="1" use_tabs="1" tab_indents="1" tab_width="4" indent="4" eol_mode="0" />
