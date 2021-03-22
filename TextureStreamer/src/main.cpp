@@ -1,18 +1,7 @@
-#include <iostream>
-
-// GLEW
-#define GLEW_STATIC
 #include <GL/glew.h>
-
-// GLFW
 #include <GLFW/glfw3.h>
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <string>
+#include "ShaderUtil.h"
 
 // Function prototypes
 std::string GetFileContents( const std::string& filename );
@@ -48,40 +37,7 @@ int main()
 	// Define the viewport dimensions
 	glViewport(0, 0, WIDTH, HEIGHT);
 
-	// Shaders
-	std::string vertex_shader_str = GetFileContents("shaders/tex.vs");
-	std::string fragment_shader_str = GetFileContents("shaders/tex.frag");
-
-	const char* vertex_shader_text = vertex_shader_str.c_str();
-	const char* fragment_shader_text = fragment_shader_str.c_str();
-
-	GLint success;
-	GLchar infoLog[512];
-
-	GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vertex_shader, 1, &vertex_shader_text, NULL);
-	glCompileShader(vertex_shader);
-	glGetShaderiv(vertex_shader, GL_COMPILE_STATUS, &success);
-	if (!success)
-	{
-		glGetShaderInfoLog(vertex_shader, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-	}
-
-	GLuint fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragment_shader, 1, &fragment_shader_text, NULL);
-	glCompileShader(fragment_shader);
-	glGetShaderiv(fragment_shader, GL_COMPILE_STATUS, &success);
-	if (!success)
-	{
-		glGetShaderInfoLog(fragment_shader, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
-	}
-
-	GLuint program = glCreateProgram();
-	glAttachShader(program, vertex_shader);
-	glAttachShader(program, fragment_shader);
-	glLinkProgram(program);
+	GLuint shaderProgram = LoadAndBuildShaderProgram("shaders/tex.vs", "shaders/tex.frag");
 
 	// Set up vertex data (and buffer(s)) and attribute pointers
 	GLfloat vertices[] =
@@ -165,12 +121,12 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		// Activate shader
-		glUseProgram(program);
+		glUseProgram(shaderProgram);
 
 		// Bind Textures using texture units
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, texture1);
-		glUniform1i(glGetUniformLocation(program, "ourTexture1"), 0);
+		glUniform1i(glGetUniformLocation(shaderProgram, "ourTexture1"), 0);
 
 		// Draw container
 		glBindVertexArray(VAO);
@@ -201,32 +157,4 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 void error_callback(int error, const char* description)
 {
 	fprintf(stderr, "Error: %s\n", description);
-}
-
-std::string GetFileContents0( const std::string& filename )
-{
-	std::string text;
-	std::ifstream file( filename );
-
-	if( !file.is_open() )
-		throw 1;
-
-	std::getline( file, text, '\0' );
-
-	file.close();
-	return text;
-}
-
-std::string GetFileContents( const std::string& filename )
-{
-	std::ifstream file;
-	file.open(filename);
-
-	std::stringstream contentStream;
-
-	contentStream << file.rdbuf();
-
-	file.close();
-	std::string contents = contentStream.str();
-	return contents;
 }
