@@ -1,3 +1,4 @@
+#include <string>
 #include <sstream>
 #include "ShaderExpection.h"
 

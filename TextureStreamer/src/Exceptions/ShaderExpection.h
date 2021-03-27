@@ -2,7 +2,6 @@
 #define SHADEREXPECTION_H
 
 #include <exception>
-#include <string>
 #include <GL/glew.h>
 #include "ShaderType.h"
 

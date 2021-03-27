@@ -2,6 +2,8 @@
 #include <GLFW/glfw3.h>
 
 #include "ShaderUtil.h"
+#include "Generator.h"
+#include "TexUtil.h"
 
 // Function prototypes
 std::string GetFileContents( const std::string& filename );
@@ -9,7 +11,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 void error_callback(int error, const char* description);
 
 // Window dimensions
-const GLuint WIDTH = 800, HEIGHT = 600;
+const GLuint WIDTH = 1024, HEIGHT = 768;
 
 // The MAIN function, from here we start the application and run the game loop
 int main()
@@ -43,10 +45,10 @@ int main()
 	GLfloat vertices[] =
 	{
 		// Positions          // Colors           // Texture Coords
-		0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 1.0f,   1.0f, 1.0f, // Top Right
-		0.5f, -0.5f, 0.0f,   1.0f, 1.0f, 1.0f,   1.0f, 0.0f, // Bottom Right
-		-0.5f, -0.5f, 0.0f,   1.0f, 1.0f, 1.0f,   0.0f, 0.0f, // Bottom Left
-		-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 1.0f,   0.0f, 1.0f  // Top Left
+		1.0f,  1.0f, 0.0f,   1.0f, 1.0f, 1.0f,   1.0f, 1.0f, // Top Right
+		1.0f, -1.0f, 0.0f,   1.0f, 1.0f, 1.0f,   1.0f, 0.0f, // Bottom Right
+		-1.0f, -1.0f, 0.0f,   1.0f, 1.0f, 1.0f,   0.0f, 0.0f, // Bottom Left
+		-1.0f,  1.0f, 0.0f,   1.0f, 1.0f, 1.0f,   0.0f, 1.0f  // Top Left
 	};
 	GLuint indices[] =    // Note that we start from 0!
 	{
@@ -81,9 +83,7 @@ int main()
 
 	// Load and create a texture
 	GLuint texture1;
-	// ====================
-	// Texture 1
-	// ====================
+
 	glGenTextures(1, &texture1);
 	glBindTexture(GL_TEXTURE_2D, texture1); // All upcoming GL_TEXTURE_2D operations now have effect on our texture object
 	// Set our texture parameters
@@ -93,18 +93,10 @@ int main()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-	// Load, create texture and generate mipmaps
-	int width = 4;
-	int height = 4;
-	unsigned char image[] =
-	{
-		255, 0, 0,    255, 255, 0,  255, 0, 255,  255, 0, 0,
-		255, 255, 0,  0, 255, 0,    0, 255, 255,  255, 255, 0,
-		255, 0, 255,  0, 255, 255,  0, 0, 255,    255, 0, 255,
-		255, 0, 0,    255, 255, 0,  255, 0, 255,  255, 0, 0,
-	};
+	Generator generator(WIDTH, HEIGHT);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+	// Load, create texture and generate mipmaps
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, generator.GetWidth(), generator.GetHeight(), 0, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8, generator.GetImage());
 	glGenerateMipmap(GL_TEXTURE_2D);
 
 	glBindTexture(GL_TEXTURE_2D, 0); // Unbind texture when done, so we won't accidentily mess up our texture.
@@ -115,10 +107,9 @@ int main()
 		// Check if any events have been activiated (key pressed, mouse moved etc.) and call corresponding response functions
 		glfwPollEvents();
 
+		generator.Generate(1000);
+
 		// Render
-		// Clear the colorbuffer
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
 
 		// Activate shader
 		glUseProgram(shaderProgram);
@@ -126,6 +117,10 @@ int main()
 		// Bind Textures using texture units
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, texture1);
+
+		//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, generator.GetWidth(), generator.GetHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, generator.GetImage());
+		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, generator.GetWidth(), generator.GetHeight(), GL_RGBA, GL_UNSIGNED_INT_8_8_8_8, generator.GetImage());
+
 		glUniform1i(glGetUniformLocation(shaderProgram, "ourTexture1"), 0);
 
 		// Draw container
