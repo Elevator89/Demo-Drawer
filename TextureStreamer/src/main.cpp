@@ -5,8 +5,8 @@
 #include <iomanip>
 
 #include "ShaderUtil.h"
-#include "Generator.h"
 #include "TexUtil.h"
+#include "Generation/RandomGenerator.h"
 
 // Function prototypes
 std::string GetFileContents( const std::string& filename );
@@ -96,10 +96,12 @@ int main()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-	Generator generator(WIDTH, HEIGHT);
+	Field<uint32_t> field(WIDTH, HEIGHT, 0x00000000);
+
+	RandomGenerator generator(100);
 
 	// Load, create texture and generate mipmaps
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, generator.GetWidth(), generator.GetHeight(), 0, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8, generator.GetImage());
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, field.GetWidth(), field.GetHeight(), 0, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8, field.GetData());
 	glGenerateMipmap(GL_TEXTURE_2D);
 
 	glBindTexture(GL_TEXTURE_2D, 0); // Unbind texture when done, so we won't accidentily mess up our texture.
@@ -112,7 +114,7 @@ int main()
 		// Check if any events have been activiated (key pressed, mouse moved etc.) and call corresponding response functions
 		glfwPollEvents();
 
-		generator.Generate(1000);
+		generator.Generate(field);
 
 		// Render
 
@@ -123,8 +125,8 @@ int main()
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, texture1);
 
-		//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, generator.GetWidth(), generator.GetHeight(), 0, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8, generator.GetImage());
-		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, generator.GetWidth(), generator.GetHeight(), GL_RGBA, GL_UNSIGNED_INT_8_8_8_8, generator.GetImage());
+		//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, field.GetWidth(), generator.GetHeight(), 0, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8, field.GetData());
+		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, field.GetWidth(), field.GetHeight(), GL_RGBA, GL_UNSIGNED_INT_8_8_8_8, field.GetData());
 
 		glUniform1i(glGetUniformLocation(shaderProgram, "ourTexture1"), 0);
 
@@ -141,7 +143,7 @@ int main()
 		time = newTime;
 
 		std::cout << std::fixed << std::setprecision(2)
-		<< '\r' << "FPS = " << 1.0 / delta;
+				  << '\r' << "FPS = " << 1.0 / delta;
 	}
 	// Properly de-allocate all resources once they've outlived their purpose
 	glDeleteVertexArrays(1, &VAO);

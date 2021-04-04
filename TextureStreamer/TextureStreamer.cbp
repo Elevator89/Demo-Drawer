@@ -66,11 +66,12 @@
 		<Unit filename="src/Exceptions/OutOfRangeException.h" />
 		<Unit filename="src/Exceptions/ShaderExpection.cpp" />
 		<Unit filename="src/Exceptions/ShaderExpection.h" />
-		<Unit filename="src/Field.h" />
 		<Unit filename="src/FileUtil.cpp" />
 		<Unit filename="src/FileUtil.h" />
-		<Unit filename="src/Generator.cpp" />
-		<Unit filename="src/Generator.h" />
+		<Unit filename="src/Generation/Field.h" />
+		<Unit filename="src/Generation/IGenerator.h" />
+		<Unit filename="src/Generation/RandomGenerator.cpp" />
+		<Unit filename="src/Generation/RandomGenerator.h" />
 		<Unit filename="src/ShaderType.h" />
 		<Unit filename="src/ShaderUtil.cpp" />
 		<Unit filename="src/ShaderUtil.h" />
