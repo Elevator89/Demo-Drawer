@@ -1,6 +1,9 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+#include <iostream>
+#include <iomanip>
+
 #include "ShaderUtil.h"
 #include "Generator.h"
 #include "TexUtil.h"
@@ -101,6 +104,8 @@ int main()
 
 	glBindTexture(GL_TEXTURE_2D, 0); // Unbind texture when done, so we won't accidentily mess up our texture.
 
+	double time = glfwGetTime();
+
 	// Game loop
 	while (!glfwWindowShouldClose(window))
 	{
@@ -118,7 +123,7 @@ int main()
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, texture1);
 
-		//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, generator.GetWidth(), generator.GetHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, generator.GetImage());
+		//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, generator.GetWidth(), generator.GetHeight(), 0, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8, generator.GetImage());
 		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, generator.GetWidth(), generator.GetHeight(), GL_RGBA, GL_UNSIGNED_INT_8_8_8_8, generator.GetImage());
 
 		glUniform1i(glGetUniformLocation(shaderProgram, "ourTexture1"), 0);
@@ -130,6 +135,13 @@ int main()
 
 		// Swap the screen buffers
 		glfwSwapBuffers(window);
+
+		double newTime = glfwGetTime();
+		double delta = newTime - time;
+		time = newTime;
+
+		std::cout << std::fixed << std::setprecision(2)
+		<< '\r' << "FPS = " << 1.0 / delta;
 	}
 	// Properly de-allocate all resources once they've outlived their purpose
 	glDeleteVertexArrays(1, &VAO);
