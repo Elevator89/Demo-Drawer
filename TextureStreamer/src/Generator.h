@@ -30,7 +30,7 @@ public:
 
 private:
 	std::default_random_engine m_generator;
-	std::uniform_int_distribution<unsigned char> m_distribution;
+	std::uniform_int_distribution<uint32_t> m_distribution;
 
 	Field<uint32_t> m_field;
 	int m_total;
