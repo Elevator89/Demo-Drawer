@@ -1,5 +1,5 @@
-#include "RandomGenerator.h"
 #include "ColorUtil.h"
+#include "Generation/RandomGenerator.h"
 
 RandomGenerator::RandomGenerator(unsigned int dotsPerStep) :
 	m_colorDistribution(0, 0xFFFFFFFF),

@@ -3,8 +3,8 @@
 
 #include <random>
 #include <stdint.h>
-#include "IGenerator.h"
-#include "Field.h"
+#include "Generation/IGenerator.h"
+#include "Generation/Field.h"
 
 class RandomGenerator : public IGenerator
 {

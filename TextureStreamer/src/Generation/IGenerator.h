@@ -2,7 +2,7 @@
 #define IGENERATOR_H
 
 #include <stdint.h>
-#include "Field.h"
+#include "Generation/Field.h"
 
 class IGenerator
 {

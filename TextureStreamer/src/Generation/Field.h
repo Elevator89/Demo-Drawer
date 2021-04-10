@@ -2,6 +2,7 @@
 #define FIELD_H
 
 #include "Exceptions/OutOfRangeException.h"
+#include "Generation/Point.h"
 
 template <typename T>
 class Field
@@ -19,11 +20,21 @@ public:
 
 	virtual ~Field() {}
 
+	T GetCell(const Point& pos)
+	{
+		return GetCell(pos.X, pos.Y);
+	}
+
 	T GetCell(unsigned int x, unsigned int y)
 	{
 		if( x >= m_width ) throw OutOfRangeException<unsigned int>("x", x, 0, m_width - 1);
 		if( y >= m_height ) throw OutOfRangeException<unsigned int>("y", y, 0, m_height - 1);
 		return m_data[y * m_width + x];
+	}
+
+	void SetCell(const Point& pos, T value)
+	{
+		SetCell(pos.X, pos.Y, value);
 	}
 
 	void SetCell(unsigned int x, unsigned int y, T value)

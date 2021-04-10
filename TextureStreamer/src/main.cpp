@@ -6,7 +6,9 @@
 
 #include "ShaderUtil.h"
 #include "TexUtil.h"
-#include "Generation/RandomGenerator.h"
+#include "Generation/CroppedTopology.h"
+#include "Generation/ThorusTopology.h"
+#include "Generation/PopWithChancePoolGenerator.h"
 
 // Function prototypes
 std::string GetFileContents( const std::string& filename );
@@ -98,7 +100,9 @@ int main()
 
 	Field<uint32_t> field(WIDTH, HEIGHT, 0x00000000);
 
-	RandomGenerator generator(100);
+
+	ITopology* topology = new ThorusTopology(WIDTH, HEIGHT);
+	IGenerator* generator = new PopWithChancePoolGenerator(topology, 0.6f, 100);
 
 	// Load, create texture and generate mipmaps
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, field.GetWidth(), field.GetHeight(), 0, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8, field.GetData());
@@ -114,7 +118,7 @@ int main()
 		// Check if any events have been activiated (key pressed, mouse moved etc.) and call corresponding response functions
 		glfwPollEvents();
 
-		generator.Generate(field);
+		generator->Generate(field);
 
 		// Render
 
