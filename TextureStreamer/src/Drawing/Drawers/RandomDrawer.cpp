@@ -1,14 +1,14 @@
 #include "ColorUtil.h"
-#include "Generation/RandomGenerator.h"
+#include "Drawing/Drawers/RandomDrawer.h"
 
-RandomGenerator::RandomGenerator(unsigned int dotsPerStep) :
+RandomDrawer::RandomDrawer(unsigned int dotsPerStep) :
 	m_colorDistribution(0, 0xFFFFFFFF),
 	m_dotsPerStep(dotsPerStep)
 {}
 
-RandomGenerator::~RandomGenerator() {}
+RandomDrawer::~RandomDrawer() {}
 
-void RandomGenerator::Generate(Field<uint32_t>& field)
+void RandomDrawer::Generate(Field<uint32_t>& field)
 {
 	std::uniform_int_distribution<unsigned int> widthDistribution(0, field.GetWidth()-1);
 	std::uniform_int_distribution<unsigned int> heightDistribution(0, field.GetHeight()-1);

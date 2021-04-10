@@ -1,8 +1,8 @@
 #ifndef THORUSTOPOLOGY_H
 #define THORUSTOPOLOGY_H
 
-#include "Generation/Point.h"
-#include "Generation/ITopology.h"
+#include "Drawing/Point.h"
+#include "Drawing/ITopology.h"
 
 class ThorusTopology : public ITopology
 {

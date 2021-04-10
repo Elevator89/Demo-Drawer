@@ -1,4 +1,4 @@
-#include "Generation/Point.h"
+#include "Drawing/Point.h"
 
 Point::Point() :
 	Point(0,0)

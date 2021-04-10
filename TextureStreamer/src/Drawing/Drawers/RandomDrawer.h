@@ -3,14 +3,14 @@
 
 #include <random>
 #include <stdint.h>
-#include "Generation/IGenerator.h"
-#include "Generation/Field.h"
+#include "Drawing/IDrawer.h"
+#include "Drawing/Field.h"
 
-class RandomGenerator : public IGenerator
+class RandomDrawer : public IDrawer
 {
 public:
-	RandomGenerator(unsigned int dotsPerStep);
-	virtual ~RandomGenerator() override;
+	RandomDrawer(unsigned int dotsPerStep);
+	virtual ~RandomDrawer() override;
 
 	void Generate(Field<uint32_t>& field) override;
 

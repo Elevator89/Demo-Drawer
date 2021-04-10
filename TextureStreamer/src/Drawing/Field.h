@@ -2,7 +2,7 @@
 #define FIELD_H
 
 #include "Exceptions/OutOfRangeException.h"
-#include "Generation/Point.h"
+#include "Drawing/Point.h"
 
 template <typename T>
 class Field

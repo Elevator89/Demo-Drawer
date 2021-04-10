@@ -1,8 +1,8 @@
 #ifndef CROPPEDTOPOLOGY_H
 #define CROPPEDTOPOLOGY_H
 
-#include "Generation/Point.h"
-#include "Generation/ITopology.h"
+#include "Drawing/Point.h"
+#include "Drawing/ITopology.h"
 
 class CroppedTopology : public ITopology
 {

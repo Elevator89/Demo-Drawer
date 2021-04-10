@@ -1,7 +1,7 @@
 #ifndef ITOPOLOGY_H
 #define ITOPOLOGY_H
 
-#include "Generation/Point.h"
+#include "Drawing/Point.h"
 
 class ITopology
 {

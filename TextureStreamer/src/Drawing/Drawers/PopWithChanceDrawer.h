@@ -5,16 +5,16 @@
 #include <unordered_set>
 #include <queue>
 #include <stdint.h>
-#include "Generation/Point.h"
-#include "Generation/IGenerator.h"
-#include "Generation/Field.h"
-#include "Generation/ITopology.h"
+#include "Drawing/Point.h"
+#include "Drawing/IDrawer.h"
+#include "Drawing/Field.h"
+#include "Drawing/ITopology.h"
 
-class PopWithChancePoolGenerator : public IGenerator
+class PopWithChanceDrawer : public IDrawer
 {
 public:
-	PopWithChancePoolGenerator(const ITopology* topology, float chanceToUsePoppedItem, unsigned int dotsPerStep);
-	virtual ~PopWithChancePoolGenerator();
+	PopWithChanceDrawer(const ITopology* topology, float chanceToUsePoppedItem, unsigned int dotsPerStep);
+	virtual ~PopWithChanceDrawer();
 
 	void Generate(Field<uint32_t>& field) override;
 

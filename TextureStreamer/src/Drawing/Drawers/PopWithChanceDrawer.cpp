@@ -1,16 +1,16 @@
 #include "ColorUtil.h"
-#include "Generation/PopWithChancePoolGenerator.h"
+#include "Drawing/Drawers/PopWithChanceDrawer.h"
 
-PopWithChancePoolGenerator::PopWithChancePoolGenerator(const ITopology* topology, float chanceToUsePoppedItem, unsigned int dotsPerStep) :
+PopWithChanceDrawer::PopWithChanceDrawer(const ITopology* topology, float chanceToUsePoppedItem, unsigned int dotsPerStep) :
 	m_topology(topology),
 	m_chanceToUsePoppedItem(chanceToUsePoppedItem),
 	m_dotsPerStep(dotsPerStep),
 	m_chanceDistribution(0, 1.0f)
 {}
 
-PopWithChancePoolGenerator::~PopWithChancePoolGenerator() {}
+PopWithChanceDrawer::~PopWithChanceDrawer() {}
 
-void PopWithChancePoolGenerator::Generate(Field<uint32_t>& field)
+void PopWithChanceDrawer::Generate(Field<uint32_t>& field)
 {
 	std::uniform_int_distribution<unsigned int> widthDistribution(0, field.GetWidth()-1);
 	std::uniform_int_distribution<unsigned int> heightDistribution(0, field.GetHeight()-1);
@@ -49,7 +49,7 @@ void PopWithChancePoolGenerator::Generate(Field<uint32_t>& field)
 	}
 }
 
-bool PopWithChancePoolGenerator::TryPushPoint(const Point& point)
+bool PopWithChanceDrawer::TryPushPoint(const Point& point)
 {
 	if(m_visitedPoints.find(point) != m_visitedPoints.end())
 		return false;

@@ -2,12 +2,12 @@
 #define IGENERATOR_H
 
 #include <stdint.h>
-#include "Generation/Field.h"
+#include "Drawing/Field.h"
 
-class IGenerator
+class IDrawer
 {
 public:
-	virtual ~IGenerator() {}
+	virtual ~IDrawer() {}
 
 	virtual void Generate(Field<uint32_t>& field) = 0;
 };

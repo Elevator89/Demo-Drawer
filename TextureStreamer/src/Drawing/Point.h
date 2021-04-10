@@ -1,7 +1,6 @@
 #ifndef POINT_H
 #define POINT_H
 
-//#include <hash_fun.h>
 #include <functional>
 
 struct Point
