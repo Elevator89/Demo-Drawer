@@ -1,5 +1,4 @@
-#ifndef ITOPOLOGY_H
-#define ITOPOLOGY_H
+#pragma once
 
 #include "Drawing/Point.h"
 
@@ -10,5 +9,3 @@ public:
 
 	virtual bool TryAdd(const Point& a, const Point& b, Point& result) const = 0;
 };
-
-#endif // TOPOLOGY_H

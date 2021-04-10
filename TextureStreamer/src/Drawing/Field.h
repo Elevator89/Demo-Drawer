@@ -1,5 +1,4 @@
-#ifndef FIELD_H
-#define FIELD_H
+#pragma once
 
 #include "Exceptions/OutOfRangeException.h"
 #include "Drawing/Point.h"
@@ -72,5 +71,3 @@ private:
 
 	T* m_data;
 };
-
-#endif // FIELD_H

@@ -8,7 +8,7 @@ RandomDrawer::RandomDrawer(unsigned int dotsPerStep) :
 
 RandomDrawer::~RandomDrawer() {}
 
-void RandomDrawer::Generate(Field<uint32_t>& field)
+void RandomDrawer::Draw(Field<uint32_t>& field)
 {
 	std::uniform_int_distribution<unsigned int> widthDistribution(0, field.GetWidth()-1);
 	std::uniform_int_distribution<unsigned int> heightDistribution(0, field.GetHeight()-1);

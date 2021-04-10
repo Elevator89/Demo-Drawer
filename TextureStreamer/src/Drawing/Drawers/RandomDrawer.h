@@ -1,5 +1,4 @@
-#ifndef RANDOMGENERATOR_H
-#define RANDOMGENERATOR_H
+#pragma once
 
 #include <random>
 #include <stdint.h>
@@ -12,12 +11,10 @@ public:
 	RandomDrawer(unsigned int dotsPerStep);
 	virtual ~RandomDrawer() override;
 
-	void Generate(Field<uint32_t>& field) override;
+	void Draw(Field<uint32_t>& field) override;
 
 private:
 	std::default_random_engine m_generator;
 	std::uniform_int_distribution<uint32_t> m_colorDistribution;
 	unsigned int m_dotsPerStep;
 };
-
-#endif

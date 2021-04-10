@@ -1,5 +1,4 @@
-#ifndef POPWITHCHANCEPOOLGENERATOR_H
-#define POPWITHCHANCEPOOLGENERATOR_H
+#pragma once
 
 #include <random>
 #include <unordered_set>
@@ -16,7 +15,7 @@ public:
 	PopWithChanceDrawer(const ITopology* topology, float chanceToUsePoppedItem, unsigned int dotsPerStep);
 	virtual ~PopWithChanceDrawer();
 
-	void Generate(Field<uint32_t>& field) override;
+	void Draw(Field<uint32_t>& field) override;
 
 private:
 	bool TryPushPoint(const Point& point);
@@ -31,5 +30,3 @@ private:
 	std::default_random_engine m_generator;
 	std::uniform_real_distribution<float> m_chanceDistribution;
 };
-
-#endif // PROBABILITYBASEDGENERATOR_H

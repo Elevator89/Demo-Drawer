@@ -10,7 +10,7 @@ PopWithChanceDrawer::PopWithChanceDrawer(const ITopology* topology, float chance
 
 PopWithChanceDrawer::~PopWithChanceDrawer() {}
 
-void PopWithChanceDrawer::Generate(Field<uint32_t>& field)
+void PopWithChanceDrawer::Draw(Field<uint32_t>& field)
 {
 	std::uniform_int_distribution<unsigned int> widthDistribution(0, field.GetWidth()-1);
 	std::uniform_int_distribution<unsigned int> heightDistribution(0, field.GetHeight()-1);

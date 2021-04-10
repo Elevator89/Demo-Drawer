@@ -1,5 +1,4 @@
-#ifndef OUTOFRANGEEXCEPTION_H
-#define OUTOFRANGEEXCEPTION_H
+#pragma once
 
 #include <exception>
 #include <string>
@@ -32,5 +31,3 @@ private:
 	T m_minValue;
 	T m_maxValue;
 };
-
-#endif // OUTOFRANGEEXCEPTION_H

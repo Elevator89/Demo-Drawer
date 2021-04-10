@@ -1,5 +1,4 @@
-#ifndef SHADERTYPE_H_INCLUDED
-#define SHADERTYPE_H_INCLUDED
+#pragma once
 
 enum class ShaderType
 {
@@ -7,5 +6,3 @@ enum class ShaderType
 	Fragment,
 	Program
 };
-
-#endif // SHADERTYPE_H_INCLUDED

@@ -1,5 +1,4 @@
-#ifndef THORUSTOPOLOGY_H
-#define THORUSTOPOLOGY_H
+#pragma once
 
 #include "Drawing/Point.h"
 #include "Drawing/ITopology.h"
@@ -16,5 +15,3 @@ private:
 	unsigned int m_width;
 	unsigned int m_height;
 };
-
-#endif // THORUSTOPOLOGY_H

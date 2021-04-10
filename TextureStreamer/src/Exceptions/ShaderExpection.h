@@ -1,5 +1,4 @@
-#ifndef SHADEREXPECTION_H
-#define SHADEREXPECTION_H
+#pragma once
 
 #include <exception>
 #include <GL/glew.h>
@@ -18,5 +17,3 @@ private:
 	const GLuint m_shader;
 	const GLchar* m_infoLog;
 };
-
-#endif // SHADEREXPECTION_H

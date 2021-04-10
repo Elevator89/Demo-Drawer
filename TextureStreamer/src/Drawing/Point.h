@@ -1,5 +1,4 @@
-#ifndef POINT_H
-#define POINT_H
+#pragma once
 
 #include <functional>
 
@@ -59,5 +58,3 @@ template<> struct hash<Point>
 	}
 };
 }
-
-#endif // POINT_H

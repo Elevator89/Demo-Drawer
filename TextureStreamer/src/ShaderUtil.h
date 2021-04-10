@@ -1,5 +1,4 @@
-#ifndef SHADER_H
-#define SHADER_H
+#pragma once
 
 #include <GL/gl.h>
 #include <string>
@@ -9,5 +8,3 @@ GLuint LoadAndBuildShaderProgram(const std::string& vsFileName, const std::strin
 GLuint BuildShaderProgram(const std::string& vertexShaderText, const std::string& fragmentShaderText);
 GLuint BuildShaderProgram(GLuint vertexShader, GLuint fragmentShader);
 GLuint CompileShader(const std::string& shaderText, ShaderType shaderType);
-
-#endif // SHADER_H

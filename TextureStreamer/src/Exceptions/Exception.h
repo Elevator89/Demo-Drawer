@@ -1,5 +1,4 @@
-#ifndef EXCEPTIONBASE_H
-#define EXCEPTIONBASE_H
+#pragma once
 
 #include <exception>
 #include <string>
@@ -15,5 +14,3 @@ public:
 private:
 	const std::string m_message;
 };
-
-#endif // EXCEPTIONBASE_H
