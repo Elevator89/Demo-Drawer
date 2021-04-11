@@ -59,10 +59,17 @@
 		<Unit filename="shaders/tex.vert">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
+		<Unit filename="src/Drawing/Colors/BouncingColorGenerator.cpp" />
+		<Unit filename="src/Drawing/Colors/BouncingColorGenerator.h" />
 		<Unit filename="src/Drawing/Colors/Color.h" />
 		<Unit filename="src/Drawing/Colors/ColorUtil.cpp" />
 		<Unit filename="src/Drawing/Colors/ColorUtil.h" />
+		<Unit filename="src/Drawing/Colors/FilteredColorGenerator.cpp" />
+		<Unit filename="src/Drawing/Colors/FilteredColorGenerator.h" />
+		<Unit filename="src/Drawing/Colors/IColorFilter.h" />
 		<Unit filename="src/Drawing/Colors/IColorGenerator.h" />
+		<Unit filename="src/Drawing/Colors/LowPassColorFilter.cpp" />
+		<Unit filename="src/Drawing/Colors/LowPassColorFilter.h" />
 		<Unit filename="src/Drawing/Colors/RandomColorGenerator.cpp" />
 		<Unit filename="src/Drawing/Colors/RandomColorGenerator.h" />
 		<Unit filename="src/Drawing/Colors/SingleColorGenerator.cpp" />

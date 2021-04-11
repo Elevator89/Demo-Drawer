@@ -13,9 +13,6 @@ PopWithChanceDrawer::~PopWithChanceDrawer() {}
 
 void PopWithChanceDrawer::Draw(Field<uint32_t>& field, unsigned int dotCount)
 {
-	std::uniform_int_distribution<unsigned int> widthDistribution(0, field.GetWidth()-1);
-	std::uniform_int_distribution<unsigned int> heightDistribution(0, field.GetHeight()-1);
-
 	for(unsigned int i = 0; i < dotCount; ++i)
 	{
 		if(m_visitedPoints.size() > (size_t)(m_fieldFillBeforeFlush * field.GetWidth() * field.GetHeight()))
@@ -27,6 +24,10 @@ void PopWithChanceDrawer::Draw(Field<uint32_t>& field, unsigned int dotCount)
 
 		if(m_queue.empty())
 		{
+			std::uniform_int_distribution<unsigned int> widthDistribution(0, field.GetWidth()-1);
+			std::uniform_int_distribution<unsigned int> heightDistribution(0, field.GetHeight()-1);
+
+			m_visitedPoints.clear();
 			Point newPoint(widthDistribution(m_generator), heightDistribution(m_generator));
 			if(TryPushPoint(newPoint))
 				field.SetCell(newPoint, color);

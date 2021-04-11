@@ -12,6 +12,9 @@
 #include "Drawing/Colors/Color.h"
 #include "Drawing/Colors/RandomColorGenerator.h"
 #include "Drawing/Colors/SingleColorGenerator.h"
+#include "Drawing/Colors/BouncingColorGenerator.h"
+#include "Drawing/Colors/FilteredColorGenerator.h"
+#include "Drawing/Colors/LowPassColorFilter.h"
 #include "Drawing/Drawers/PopWithChanceDrawer.h"
 
 // Function prototypes
@@ -107,7 +110,14 @@ int main()
 
 
 	ITopology* topology = new ThorusTopology(Width, Height);
-	IColorGenerator* colorGenerator = new SingleColorGenerator((uint32_t)Color::White);
+
+	IColorFilter* colorFilter = new LowPassColorFilter(6, 0.2f);
+
+	//IColorGenerator* colorGenerator = new SingleColorGenerator((uint32_t)Color::White);
+	//IColorGenerator* baseColorGenerator = new RandomColorGenerator();
+	//IColorGenerator* colorGenerator = new FilteredColorGenerator(baseColorGenerator, colorFilter);
+	IColorGenerator* colorGenerator = new BouncingColorGenerator(0.000001f, 0.000003f, 0.000011f);
+
 	IDrawer* generator = new PopWithChanceDrawer(topology, colorGenerator, 0.6f, 0.75f);
 
 	// Load, create texture and generate mipmaps

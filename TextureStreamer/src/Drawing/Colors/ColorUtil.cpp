@@ -1,5 +1,22 @@
 #include "ColorUtil.h"
 
+uint32_t ColorSum(uint32_t colorA, uint32_t colorB)
+{
+	unsigned char rA, rB;
+	unsigned char gA, gB;
+	unsigned char bA, bB;
+	unsigned char aA, aB;
+
+	ColorDecode(colorA, rA, gA, bA, aA);
+	ColorDecode(colorB, rB, gB, bB, aB);
+
+	return ColorEncode(
+			   (unsigned char)(rA + rB),
+			   (unsigned char)(gA + gB),
+			   (unsigned char)(bA + bB),
+			   (unsigned char)(aA + aB));
+}
+
 uint32_t ColorEncode(float r, float g, float b, float a)
 {
 	return ColorEncode(
@@ -35,4 +52,23 @@ void ColorDecode(uint32_t intData, unsigned char& r, unsigned char& g, unsigned 
 	b = (intData & 0x0000ff00) >> 8;
 	g = (intData & 0x00ff0000) >> 16;
 	r = (intData & 0xff000000) >> 24;
+}
+
+float Bounce01(float value)
+{
+	bool lessThan0 = value < 0.0f;
+	bool greaterThan1 = value > 1.0f;
+	while(lessThan0 || greaterThan1)
+	{
+		if(lessThan0)
+			value -= value;
+
+		// make the value "bounce" from 1.0 value
+		if(greaterThan1)
+			value = 2.0f - value;
+
+		lessThan0 = value < 0.0f;
+		greaterThan1 = value > 1.0f;
+	}
+	return value;
 }
