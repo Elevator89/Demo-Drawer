@@ -5,14 +5,15 @@
 #include <queue>
 #include <stdint.h>
 #include "Drawing/Point.h"
-#include "Drawing/IDrawer.h"
 #include "Drawing/Field.h"
-#include "Drawing/ITopology.h"
+#include "Drawing/Drawers/IDrawer.h"
+#include "Drawing/Topologies/ITopology.h"
+#include "Drawing/Colors/IColorGenerator.h"
 
 class PopWithChanceDrawer : public IDrawer
 {
 public:
-	PopWithChanceDrawer(const ITopology* topology, float chanceToUsePoppedItem, unsigned int dotsPerStep);
+	PopWithChanceDrawer(const ITopology* topology, IColorGenerator* colorGenerator, float chanceToUsePoppedItem, unsigned int dotsPerStep);
 	virtual ~PopWithChanceDrawer();
 
 	void Draw(Field<uint32_t>& field) override;
@@ -22,6 +23,7 @@ private:
 
 private:
 	const ITopology* m_topology;
+	IColorGenerator* m_colorGenerator;
 	float m_chanceToUsePoppedItem;
 	unsigned int m_dotsPerStep;
 

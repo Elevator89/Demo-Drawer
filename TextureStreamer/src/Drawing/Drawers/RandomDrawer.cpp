@@ -1,8 +1,8 @@
-#include "ColorUtil.h"
+#include "Drawing/Colors/ColorUtil.h"
 #include "Drawing/Drawers/RandomDrawer.h"
 
-RandomDrawer::RandomDrawer(unsigned int dotsPerStep) :
-	m_colorDistribution(0, 0xFFFFFFFF),
+RandomDrawer::RandomDrawer(IColorGenerator* colorGenerator, unsigned int dotsPerStep) :
+	m_colorGenerator(colorGenerator),
 	m_dotsPerStep(dotsPerStep)
 {}
 
@@ -15,10 +15,9 @@ void RandomDrawer::Draw(Field<uint32_t>& field)
 
 	for(unsigned int i = 0; i < m_dotsPerStep; ++i)
 	{
-		unsigned int x = widthDistribution(m_generator);
-		unsigned int y = heightDistribution(m_generator);
-		uint32_t color = m_colorDistribution(m_generator);
-
-		field.SetCell(x,y,color);
+		field.SetCell(
+			widthDistribution(m_generator),
+			heightDistribution(m_generator),
+			m_colorGenerator->GenerateColor());
 	}
 }

@@ -1,8 +1,9 @@
-#include "ColorUtil.h"
+#include "Drawing/Colors/ColorUtil.h"
 #include "Drawing/Drawers/PopWithChanceDrawer.h"
 
-PopWithChanceDrawer::PopWithChanceDrawer(const ITopology* topology, float chanceToUsePoppedItem, unsigned int dotsPerStep) :
+PopWithChanceDrawer::PopWithChanceDrawer(const ITopology* topology, IColorGenerator* colorGenerator, float chanceToUsePoppedItem, unsigned int dotsPerStep) :
 	m_topology(topology),
+	m_colorGenerator(colorGenerator),
 	m_chanceToUsePoppedItem(chanceToUsePoppedItem),
 	m_dotsPerStep(dotsPerStep),
 	m_chanceDistribution(0, 1.0f)
@@ -17,12 +18,14 @@ void PopWithChanceDrawer::Draw(Field<uint32_t>& field)
 
 	for(unsigned int i = 0; i < m_dotsPerStep; ++i)
 	{
+		uint32_t color = m_colorGenerator->GenerateColor();
+
 		if(m_queue.empty())
 		{
 			m_visitedPoints.clear();
 			Point newPoint(widthDistribution(m_generator), heightDistribution(m_generator));
 			if(TryPushPoint(newPoint))
-				field.SetCell(newPoint, (uint32_t)Color::White);
+				field.SetCell(newPoint, color);
 		}
 
 		Point point = m_queue.front();
@@ -33,19 +36,19 @@ void PopWithChanceDrawer::Draw(Field<uint32_t>& field)
 
 		Point pointToUp;
 		if(m_topology->TryAdd(point, Point::Up(), pointToUp) && TryPushPoint(pointToUp))
-			field.SetCell(pointToUp, (uint32_t)Color::Yellow);
+			field.SetCell(pointToUp, color);
 
 		Point pointToDown;
 		if(m_topology->TryAdd(point, Point::Down(), pointToDown) && TryPushPoint(pointToDown))
-			field.SetCell(pointToDown, (uint32_t)Color::Blue);
+			field.SetCell(pointToDown, color);
 
 		Point pointToLeft;
 		if(m_topology->TryAdd(point, Point::Left(), pointToLeft) && TryPushPoint(pointToLeft))
-			field.SetCell(pointToLeft, (uint32_t)Color::Red);
+			field.SetCell(pointToLeft, color);
 
 		Point pointToRight;
 		if(m_topology->TryAdd(point, Point::Right(), pointToRight) && TryPushPoint(pointToRight))
-			field.SetCell(pointToRight, (uint32_t)Color::Green);
+			field.SetCell(pointToRight, color);
 	}
 }
 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Drawing/Point.h"
-#include "Drawing/ITopology.h"
+#include "Drawing/Topologies/ITopology.h"
 
 class ThorusTopology : public ITopology
 {

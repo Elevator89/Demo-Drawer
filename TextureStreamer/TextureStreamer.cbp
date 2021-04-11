@@ -59,19 +59,22 @@
 		<Unit filename="shaders/tex.vs">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
-		<Unit filename="src/ColorUtil.cpp" />
-		<Unit filename="src/ColorUtil.h" />
+		<Unit filename="src/Drawing/Colors/ColorUtil.cpp" />
+		<Unit filename="src/Drawing/Colors/ColorUtil.h" />
+		<Unit filename="src/Drawing/Colors/IColorGenerator.h" />
+		<Unit filename="src/Drawing/Colors/RandomColorGenerator.cpp" />
+		<Unit filename="src/Drawing/Colors/RandomColorGenerator.h" />
+		<Unit filename="src/Drawing/Drawers/IDrawer.h" />
 		<Unit filename="src/Drawing/Drawers/PopWithChanceDrawer.cpp" />
 		<Unit filename="src/Drawing/Drawers/PopWithChanceDrawer.h" />
 		<Unit filename="src/Drawing/Drawers/RandomDrawer.cpp" />
 		<Unit filename="src/Drawing/Drawers/RandomDrawer.h" />
 		<Unit filename="src/Drawing/Field.h" />
-		<Unit filename="src/Drawing/IDrawer.h" />
-		<Unit filename="src/Drawing/ITopology.h" />
 		<Unit filename="src/Drawing/Point.cpp" />
 		<Unit filename="src/Drawing/Point.h" />
 		<Unit filename="src/Drawing/Topologies/CroppedTopology.cpp" />
 		<Unit filename="src/Drawing/Topologies/CroppedTopology.h" />
+		<Unit filename="src/Drawing/Topologies/ITopology.h" />
 		<Unit filename="src/Drawing/Topologies/ThorusTopology.cpp" />
 		<Unit filename="src/Drawing/Topologies/ThorusTopology.h" />
 		<Unit filename="src/Exceptions/Exception.cpp" />

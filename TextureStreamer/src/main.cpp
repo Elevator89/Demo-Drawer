@@ -8,6 +8,7 @@
 #include "TexUtil.h"
 #include "Drawing/Topologies/CroppedTopology.h"
 #include "Drawing/Topologies/ThorusTopology.h"
+#include "Drawing/Colors/RandomColorGenerator.h"
 #include "Drawing/Drawers/PopWithChanceDrawer.h"
 
 // Function prototypes
@@ -102,7 +103,8 @@ int main()
 
 
 	ITopology* topology = new ThorusTopology(WIDTH, HEIGHT);
-	IDrawer* generator = new PopWithChanceDrawer(topology, 0.6f, 100);
+	IColorGenerator* colorGenerator = new RandomColorGenerator();
+	IDrawer* generator = new PopWithChanceDrawer(topology, colorGenerator, 0.6f, 100);
 
 	// Load, create texture and generate mipmaps
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, field.GetWidth(), field.GetHeight(), 0, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8, field.GetData());
