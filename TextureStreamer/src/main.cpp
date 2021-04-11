@@ -104,7 +104,7 @@ int main()
 
 	ITopology* topology = new ThorusTopology(WIDTH, HEIGHT);
 	IColorGenerator* colorGenerator = new RandomColorGenerator();
-	IDrawer* generator = new PopWithChanceDrawer(topology, colorGenerator, 0.6f, 100);
+	IDrawer* generator = new PopWithChanceDrawer(topology, colorGenerator, 0.6f, 0.75f, 100);
 
 	// Load, create texture and generate mipmaps
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, field.GetWidth(), field.GetHeight(), 0, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8, field.GetData());
