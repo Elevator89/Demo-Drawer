@@ -5,11 +5,11 @@
 struct Point
 {
 public:
-	unsigned int X;
-	unsigned int Y;
+	int X;
+	int Y;
 
 	Point();
-	Point(unsigned int x, unsigned int y);
+	Point(int x, int y);
 	virtual ~Point();
 
 	inline static Point Zero()

@@ -12,6 +12,6 @@ public:
 	virtual bool TryAdd(const Point& a, const Point& b, Point& result) const override;
 
 private:
-	unsigned int m_width;
-	unsigned int m_height;
+	int m_width;
+	int m_height;
 };
