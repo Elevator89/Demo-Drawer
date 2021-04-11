@@ -1,6 +1,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+#include <cmath>
 #include <iostream>
 #include <iomanip>
 
@@ -14,10 +15,12 @@
 // Function prototypes
 std::string GetFileContents( const std::string& filename );
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void error_callback(int error, const char* description);
 
 // Window dimensions
 const GLuint WIDTH = 1024, HEIGHT = 768;
+unsigned int dotsPerStep = 100;
 
 // The MAIN function, from here we start the application and run the game loop
 int main()
@@ -36,6 +39,8 @@ int main()
 
 	// Set the required callback functions
 	glfwSetKeyCallback(window, key_callback);
+	glfwSetScrollCallback(window, scroll_callback);
+
 
 	// Set this to true so GLEW knows to use a modern approach to retrieving function pointers and extensions
 	glewExperimental = GL_TRUE;
@@ -113,7 +118,6 @@ int main()
 	glBindTexture(GL_TEXTURE_2D, 0); // Unbind texture when done, so we won't accidentily mess up our texture.
 
 	double time = glfwGetTime();
-	unsigned int dotsPerStep = 100;
 
 	// Game loop
 	while (!glfwWindowShouldClose(window))
@@ -150,7 +154,7 @@ int main()
 		time = newTime;
 
 		std::cout << std::fixed << std::setprecision(2)
-				  << '\r' << "FPS = " << 1.0 / delta;
+				  << "FPS = " << 1.0 / delta << '\r';
 	}
 	// Properly de-allocate all resources once they've outlived their purpose
 	glDeleteVertexArrays(1, &VAO);
@@ -168,6 +172,12 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 {
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, GL_TRUE);
+}
+
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+	dotsPerStep = (unsigned int)(dotsPerStep * pow(2.0, yoffset));
+	std::cout << "Dots per step = " << dotsPerStep << std::endl;
 }
 
 void error_callback(int error, const char* description)
