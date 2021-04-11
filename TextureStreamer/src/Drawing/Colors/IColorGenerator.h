@@ -7,5 +7,5 @@ class IColorGenerator
 public:
 	virtual ~IColorGenerator() {}
 
-    virtual uint32_t GenerateColor() = 0;
+	virtual uint32_t GenerateColor() = 0;
 };

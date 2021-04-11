@@ -9,14 +9,13 @@
 class RandomDrawer : public IDrawer
 {
 public:
-	RandomDrawer(IColorGenerator* colorGenerator, unsigned int dotsPerStep);
+	RandomDrawer(IColorGenerator* colorGenerator);
 	virtual ~RandomDrawer() override;
 
-	void Draw(Field<uint32_t>& field) override;
+	void Draw(Field<uint32_t>& field, unsigned int dotCount) override;
 
 private:
 	std::default_random_engine m_generator;
 	std::uniform_int_distribution<uint32_t> m_colorDistribution;
 	IColorGenerator* m_colorGenerator;
-	unsigned int m_dotsPerStep;
 };

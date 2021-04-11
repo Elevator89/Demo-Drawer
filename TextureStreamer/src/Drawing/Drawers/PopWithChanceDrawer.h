@@ -13,10 +13,10 @@
 class PopWithChanceDrawer : public IDrawer
 {
 public:
-	PopWithChanceDrawer(const ITopology* topology, IColorGenerator* colorGenerator, float chanceToUsePoppedItem, float fieldFillBeforeFlush, unsigned int dotsPerStep);
+	PopWithChanceDrawer(const ITopology* topology, IColorGenerator* colorGenerator, float chanceToUsePoppedItem, float fieldFillBeforeFlush);
 	virtual ~PopWithChanceDrawer();
 
-	void Draw(Field<uint32_t>& field) override;
+	void Draw(Field<uint32_t>& field, unsigned int dotCount) override;
 
 private:
 	bool TryPushPoint(const Point& point);
@@ -26,7 +26,6 @@ private:
 	IColorGenerator* m_colorGenerator;
 	float m_chanceToUsePoppedItem;
 	float m_fieldFillBeforeFlush;
-	unsigned int m_dotsPerStep;
 
 	std::unordered_set<Point> m_visitedPoints;
 	std::queue<Point> m_queue;

@@ -1,23 +1,22 @@
 #include "Drawing/Colors/ColorUtil.h"
 #include "Drawing/Drawers/PopWithChanceDrawer.h"
 
-PopWithChanceDrawer::PopWithChanceDrawer(const ITopology* topology, IColorGenerator* colorGenerator, float chanceToUsePoppedItem, float fieldFillBeforeFlush, unsigned int dotsPerStep) :
+PopWithChanceDrawer::PopWithChanceDrawer(const ITopology* topology, IColorGenerator* colorGenerator, float chanceToUsePoppedItem, float fieldFillBeforeFlush) :
 	m_topology(topology),
 	m_colorGenerator(colorGenerator),
 	m_chanceToUsePoppedItem(chanceToUsePoppedItem),
 	m_fieldFillBeforeFlush(fieldFillBeforeFlush),
-	m_dotsPerStep(dotsPerStep),
 	m_chanceDistribution(0, 1.0f)
 {}
 
 PopWithChanceDrawer::~PopWithChanceDrawer() {}
 
-void PopWithChanceDrawer::Draw(Field<uint32_t>& field)
+void PopWithChanceDrawer::Draw(Field<uint32_t>& field, unsigned int dotCount)
 {
 	std::uniform_int_distribution<unsigned int> widthDistribution(0, field.GetWidth()-1);
 	std::uniform_int_distribution<unsigned int> heightDistribution(0, field.GetHeight()-1);
 
-	for(unsigned int i = 0; i < m_dotsPerStep; ++i)
+	for(unsigned int i = 0; i < dotCount; ++i)
 	{
 		if(m_visitedPoints.size() > (size_t)(m_fieldFillBeforeFlush * field.GetWidth() * field.GetHeight()))
 		{
