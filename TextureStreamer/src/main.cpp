@@ -4,6 +4,7 @@
 #include <cmath>
 #include <iostream>
 #include <iomanip>
+#include <algorithm>
 
 #include "ShaderUtil.h"
 #include "TexUtil.h"
@@ -18,28 +19,47 @@
 #include "Drawing/Drawers/PopWithChanceDrawer.h"
 
 // Function prototypes
-std::string GetFileContents( const std::string& filename );
+char* getCmdOption(char** begin, char** end, const std::string & option);
+bool cmdOptionExists(char** begin, char** end, const std::string& option);
+
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void error_callback(int error, const char* description);
 
 // Window dimensions
-const GLuint Width = 1024, Height = 768;
+GLuint width = 1024;
+GLuint height = 768;
 unsigned int dotsPerStep = 100;
 
 // The MAIN function, from here we start the application and run the game loop
-int main()
+int main(int argc, char * argv[])
 {
 	// Init GLFW
 	glfwInit();
+
 	// Set all the required options for GLFW
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-	// Create a GLFWwindow object that we can use for GLFW's functions
-	GLFWwindow* window = glfwCreateWindow(Width, Height, "Texture streaming demo", nullptr, nullptr);
+	GLFWwindow* window = nullptr;
+
+	if(cmdOptionExists(argv, argv+argc, "-f"))
+	{
+		GLFWmonitor* primaryMonitor = glfwGetPrimaryMonitor();
+		const GLFWvidmode* mode = glfwGetVideoMode(primaryMonitor);
+		width = mode->width;
+		height = mode->height;
+
+		window = glfwCreateWindow(width, height, "Texture streaming demo", primaryMonitor, nullptr);
+		glfwSetWindowMonitor(window, primaryMonitor, 0, 0, width, height, mode->refreshRate);
+	}
+	else
+	{
+		window = glfwCreateWindow(width, height, "Texture streaming demo", nullptr, nullptr);
+	}
+
 	glfwMakeContextCurrent(window);
 
 	// Set the required callback functions
@@ -53,7 +73,7 @@ int main()
 	glewInit();
 
 	// Define the viewport dimensions
-	glViewport(0, 0, Width, Height);
+	glViewport(0, 0, width, height);
 
 	GLuint shaderProgram = LoadAndBuildShaderProgram("shaders/tex.vert", "shaders/tex.frag");
 
@@ -106,10 +126,10 @@ int main()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-	Field<uint32_t> field(Width, Height, 0x00000000);
+	Field<uint32_t> field(width, height, 0x00000000);
 
 
-	ITopology* topology = new ThorusTopology(Width, Height);
+	ITopology* topology = new ThorusTopology(width, height);
 
 	IColorFilter* colorFilter = new LowPassColorFilter(6, 0.2f);
 
@@ -174,6 +194,21 @@ int main()
 
 	glfwTerminate();
 	exit(EXIT_SUCCESS);
+}
+
+char* getCmdOption(char** begin, char** end, const std::string & option)
+{
+	char** itr = std::find(begin, end, option);
+	if (itr != end && ++itr != end)
+	{
+		return *itr;
+	}
+	return 0;
+}
+
+bool cmdOptionExists(char** begin, char** end, const std::string& option)
+{
+	return std::find(begin, end, option) != end;
 }
 
 // Is called whenever a key is pressed/released via GLFW
