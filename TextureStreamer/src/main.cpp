@@ -9,7 +9,9 @@
 #include "TexUtil.h"
 #include "Drawing/Topologies/CroppedTopology.h"
 #include "Drawing/Topologies/ThorusTopology.h"
+#include "Drawing/Colors/Color.h"
 #include "Drawing/Colors/RandomColorGenerator.h"
+#include "Drawing/Colors/SingleColorGenerator.h"
 #include "Drawing/Drawers/PopWithChanceDrawer.h"
 
 // Function prototypes
@@ -105,7 +107,7 @@ int main()
 
 
 	ITopology* topology = new ThorusTopology(Width, Height);
-	IColorGenerator* colorGenerator = new RandomColorGenerator();
+	IColorGenerator* colorGenerator = new SingleColorGenerator((uint32_t)Color::White);
 	IDrawer* generator = new PopWithChanceDrawer(topology, colorGenerator, 0.6f, 0.75f);
 
 	// Load, create texture and generate mipmaps
