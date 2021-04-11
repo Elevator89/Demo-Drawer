@@ -50,7 +50,7 @@ int main()
 	// Define the viewport dimensions
 	glViewport(0, 0, Width, Height);
 
-	GLuint shaderProgram = LoadAndBuildShaderProgram("shaders/tex.vs", "shaders/tex.frag");
+	GLuint shaderProgram = LoadAndBuildShaderProgram("shaders/tex.vert", "shaders/tex.frag");
 
 	// Set up vertex data (and buffer(s)) and attribute pointers
 	GLfloat vertices[] =

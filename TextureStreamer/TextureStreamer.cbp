@@ -50,13 +50,13 @@
 		<Unit filename="shaders/simple.frag">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
-		<Unit filename="shaders/simple.vs">
+		<Unit filename="shaders/simple.vert">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
 		<Unit filename="shaders/tex.frag">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
-		<Unit filename="shaders/tex.vs">
+		<Unit filename="shaders/tex.vert">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
 		<Unit filename="src/Drawing/Colors/ColorUtil.cpp" />
