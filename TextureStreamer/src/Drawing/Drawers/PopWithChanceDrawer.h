@@ -16,7 +16,7 @@ public:
 	PopWithChanceDrawer(const ITopology* topology, IColorGenerator* colorGenerator, float chanceToUsePoppedItem, float fieldFillBeforeFlush);
 	virtual ~PopWithChanceDrawer();
 
-	void Draw(Field<uint32_t>& field, unsigned int dotCount) override;
+	void Draw(Field<uint32_t>& field) override;
 
 private:
 	bool TryPushPoint(const Point& point);

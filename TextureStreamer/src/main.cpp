@@ -134,7 +134,8 @@ int main()
 		// Check if any events have been activiated (key pressed, mouse moved etc.) and call corresponding response functions
 		glfwPollEvents();
 
-		generator->Draw(field, dotsPerStep);
+		for(unsigned int i= 0; i< dotsPerStep; ++i)
+			generator->Draw(field);
 
 		// Render
 

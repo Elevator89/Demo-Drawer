@@ -12,7 +12,7 @@ public:
 	RandomDrawer(IColorGenerator* colorGenerator);
 	virtual ~RandomDrawer() override;
 
-	void Draw(Field<uint32_t>& field, unsigned int dotCount) override;
+	void Draw(Field<uint32_t>& field) override;
 
 private:
 	std::default_random_engine m_generator;
