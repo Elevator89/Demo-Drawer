@@ -186,6 +186,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
 	dotsPerStep = (unsigned int)(dotsPerStep * pow(2.0, yoffset));
+	if(dotsPerStep < 1)
+		dotsPerStep = 1;
 	std::cout << "Dots per step = " << dotsPerStep << std::endl;
 }
 
