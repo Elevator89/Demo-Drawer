@@ -19,7 +19,7 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void error_callback(int error, const char* description);
 
 // Window dimensions
-const GLuint WIDTH = 1024, HEIGHT = 768;
+const GLuint Width = 1024, Height = 768;
 unsigned int dotsPerStep = 100;
 
 // The MAIN function, from here we start the application and run the game loop
@@ -34,7 +34,7 @@ int main()
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
 	// Create a GLFWwindow object that we can use for GLFW's functions
-	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Texture streaming demo", nullptr, nullptr);
+	GLFWwindow* window = glfwCreateWindow(Width, Height, "Texture streaming demo", nullptr, nullptr);
 	glfwMakeContextCurrent(window);
 
 	// Set the required callback functions
@@ -48,18 +48,18 @@ int main()
 	glewInit();
 
 	// Define the viewport dimensions
-	glViewport(0, 0, WIDTH, HEIGHT);
+	glViewport(0, 0, Width, Height);
 
 	GLuint shaderProgram = LoadAndBuildShaderProgram("shaders/tex.vs", "shaders/tex.frag");
 
 	// Set up vertex data (and buffer(s)) and attribute pointers
 	GLfloat vertices[] =
 	{
-		// Positions          // Colors           // Texture Coords
-		1.0f,  1.0f, 0.0f,   1.0f, 1.0f, 1.0f,   1.0f, 1.0f, // Top Right
-		1.0f, -1.0f, 0.0f,   1.0f, 1.0f, 1.0f,   1.0f, 0.0f, // Bottom Right
-		-1.0f, -1.0f, 0.0f,   1.0f, 1.0f, 1.0f,   0.0f, 0.0f, // Bottom Left
-		-1.0f,  1.0f, 0.0f,   1.0f, 1.0f, 1.0f,   0.0f, 1.0f  // Top Left
+		// Positions         // Texture Coords
+		1.0f,  1.0f, 0.0f,   1.0f, 1.0f, // Top Right
+		1.0f, -1.0f, 0.0f,   1.0f, 0.0f, // Bottom Right
+		-1.0f, -1.0f, 0.0f,  0.0f, 0.0f, // Bottom Left
+		-1.0f,  1.0f, 0.0f,  0.0f, 1.0f  // Top Left
 	};
 	GLuint indices[] =    // Note that we start from 0!
 	{
@@ -80,14 +80,11 @@ int main()
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
 	// Position attribute
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);
 	glEnableVertexAttribArray(0);
-	// Color attribute
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
-	glEnableVertexAttribArray(1);
 	// TexCoord attribute
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(6 * sizeof(GLfloat)));
-	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(1);
 
 	glBindVertexArray(0); // Unbind VAO
 
@@ -104,10 +101,10 @@ int main()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-	Field<uint32_t> field(WIDTH, HEIGHT, 0x00000000);
+	Field<uint32_t> field(Width, Height, 0x00000000);
 
 
-	ITopology* topology = new ThorusTopology(WIDTH, HEIGHT);
+	ITopology* topology = new ThorusTopology(Width, Height);
 	IColorGenerator* colorGenerator = new RandomColorGenerator();
 	IDrawer* generator = new PopWithChanceDrawer(topology, colorGenerator, 0.6f, 0.75f);
 
@@ -136,7 +133,6 @@ int main()
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, texture1);
 
-		//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, field.GetWidth(), generator.GetHeight(), 0, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8, field.GetData());
 		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, field.GetWidth(), field.GetHeight(), GL_RGBA, GL_UNSIGNED_INT_8_8_8_8, field.GetData());
 
 		glUniform1i(glGetUniformLocation(shaderProgram, "ourTexture1"), 0);
