@@ -1,18 +1,18 @@
 #include "Drawing/Colors/Color.h"
 #include "Drawing/Colors/ColorUtil.h"
-#include "Drawing/Drawers/PopWithChanceDrawer.h"
+#include "Drawing/Drawers/QueuePushWithChanceDrawer.h"
 
-PopWithChanceDrawer::PopWithChanceDrawer(const ITopology* topology, IColorGenerator* colorGenerator, float chanceToUsePoppedItem, float fieldFillBeforeFlush) :
+QueuePushWithChanceDrawer::QueuePushWithChanceDrawer(const ITopology* topology, IColorGenerator* colorGenerator, float chanceToPushItem, float fieldFillBeforeFlush) :
 	m_topology(topology),
 	m_colorGenerator(colorGenerator),
-	m_chanceToUsePoppedItem(chanceToUsePoppedItem),
+	m_chanceToPushItem(chanceToPushItem),
 	m_fieldFillBeforeFlush(fieldFillBeforeFlush),
 	m_chanceDistribution(0, 1.0f)
 {}
 
-PopWithChanceDrawer::~PopWithChanceDrawer() {}
+QueuePushWithChanceDrawer::~QueuePushWithChanceDrawer() {}
 
-void PopWithChanceDrawer::Draw(Field<uint32_t>& field)
+void QueuePushWithChanceDrawer::Draw(Field<uint32_t>& field)
 {
 	if(m_visitedPoints.size() > (size_t)(m_fieldFillBeforeFlush * field.GetWidth() * field.GetHeight()))
 	{
@@ -33,27 +33,24 @@ void PopWithChanceDrawer::Draw(Field<uint32_t>& field)
 	m_queue.pop();
 	field.SetCell(point, m_colorGenerator->GenerateColor());
 
-	if(m_chanceDistribution(m_generator) > m_chanceToUsePoppedItem)
-		return;
-
 	Point pointToUp;
-	if(m_topology->TryAdd(point, Point::Up(), pointToUp) && TryPushPoint(pointToUp))
+	if(m_chanceDistribution(m_generator) < m_chanceToPushItem && m_topology->TryAdd(point, Point::Up(), pointToUp) && TryPushPoint(pointToUp))
 		field.SetCell(pointToUp, (uint32_t)Color::White);
 
 	Point pointToDown;
-	if(m_topology->TryAdd(point, Point::Down(), pointToDown) && TryPushPoint(pointToDown))
+	if(m_chanceDistribution(m_generator) < m_chanceToPushItem && m_topology->TryAdd(point, Point::Down(), pointToDown) && TryPushPoint(pointToDown))
 		field.SetCell(pointToDown, (uint32_t)Color::White);
 
 	Point pointToLeft;
-	if(m_topology->TryAdd(point, Point::Left(), pointToLeft) && TryPushPoint(pointToLeft))
+	if(m_chanceDistribution(m_generator) < m_chanceToPushItem && m_topology->TryAdd(point, Point::Left(), pointToLeft) && TryPushPoint(pointToLeft))
 		field.SetCell(pointToLeft, (uint32_t)Color::White);
 
 	Point pointToRight;
-	if(m_topology->TryAdd(point, Point::Right(), pointToRight) && TryPushPoint(pointToRight))
+	if(m_chanceDistribution(m_generator) < m_chanceToPushItem && m_topology->TryAdd(point, Point::Right(), pointToRight) && TryPushPoint(pointToRight))
 		field.SetCell(pointToRight, (uint32_t)Color::White);
 }
 
-bool PopWithChanceDrawer::TryPushPoint(const Point& point)
+bool QueuePushWithChanceDrawer::TryPushPoint(const Point& point)
 {
 	if(m_visitedPoints.find(point) != m_visitedPoints.end())
 		return false;

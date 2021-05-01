@@ -16,7 +16,10 @@
 #include "Drawing/Colors/BouncingColorGenerator.h"
 #include "Drawing/Colors/FilteredColorGenerator.h"
 #include "Drawing/Colors/LowPassColorFilter.h"
-#include "Drawing/Drawers/PopWithChanceDrawer.h"
+#include "Drawing/Drawers/QueuePopWithChanceDrawer.h"
+#include "Drawing/Drawers/StackPopWithChanceDrawer.h"
+#include "Drawing/Drawers/QueuePushWithChanceDrawer.h"
+#include "Drawing/Drawers/StackPushWithChanceDrawer.h"
 
 // Function prototypes
 char* getCmdOption(char** begin, char** end, const std::string & option);
@@ -29,7 +32,7 @@ void error_callback(int error, const char* description);
 // Window dimensions
 GLuint width = 1024;
 GLuint height = 768;
-unsigned int dotsPerStep = 100;
+float dotsPerStep = 100.0f;
 
 // The MAIN function, from here we start the application and run the game loop
 int main(int argc, char * argv[])
@@ -138,7 +141,7 @@ int main(int argc, char * argv[])
 	//IColorGenerator* colorGenerator = new FilteredColorGenerator(baseColorGenerator, colorFilter);
 	IColorGenerator* colorGenerator = new BouncingColorGenerator(0.000001f, 0.000003f, 0.000011f);
 
-	IDrawer* generator = new PopWithChanceDrawer(topology, colorGenerator, 0.6f, 0.75f);
+	IDrawer* generator = new QueuePushWithChanceDrawer(topology, colorGenerator, 0.5f, 0.95f);
 
 	// Load, create texture and generate mipmaps
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, field.GetWidth(), field.GetHeight(), 0, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8, field.GetData());
@@ -148,14 +151,25 @@ int main(int argc, char * argv[])
 
 	double time = glfwGetTime();
 
+
+	float dotsToDraw = 0.0f;
+
 	// Game loop
 	while (!glfwWindowShouldClose(window))
 	{
 		// Check if any events have been activiated (key pressed, mouse moved etc.) and call corresponding response functions
 		glfwPollEvents();
 
-		for(unsigned int i= 0; i< dotsPerStep; ++i)
-			generator->Draw(field);
+		dotsToDraw += dotsPerStep;
+
+		if(dotsToDraw >= 1.0f)
+		{
+			unsigned int dotsToDrawThisFrame = (unsigned int)dotsToDraw;
+			dotsToDraw -= dotsToDrawThisFrame;
+
+			for(unsigned int i= 0; i < dotsToDrawThisFrame; ++i)
+				generator->Draw(field);
+		}
 
 		// Render
 
@@ -220,9 +234,9 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
-	dotsPerStep = (unsigned int)(dotsPerStep * pow(2.0, yoffset));
-	if(dotsPerStep < 1)
-		dotsPerStep = 1;
+	dotsPerStep = dotsPerStep * pow(2.0, yoffset);
+	if(dotsPerStep < 1/60.0f)
+		dotsPerStep = 1/60.0f;
 	std::cout << "Dots per step = " << dotsPerStep << std::endl;
 }
 
