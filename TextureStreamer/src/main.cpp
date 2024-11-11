@@ -182,12 +182,12 @@ int main(int argc, char * argv[])
 
 		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, field.GetWidth(), field.GetHeight(), GL_RGBA, GL_UNSIGNED_INT_8_8_8_8, field.GetData());
 
-		glUniform1i(glGetUniformLocation(shaderProgram, "ourTexture1"), 0);
-
 		// Draw container
 		glBindVertexArray(VAO);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
+
+		glBindTexture(GL_TEXTURE_2D, 0);
 
 		// Swap the screen buffers
 		glfwSwapBuffers(window);
