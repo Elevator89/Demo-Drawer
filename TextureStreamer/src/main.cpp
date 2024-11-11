@@ -207,6 +207,12 @@ int main(int argc, char * argv[])
 	glfwDestroyWindow(window);
 
 	glfwTerminate();
+
+	delete drawer;
+	delete colorGenerator;
+	delete colorFilter;
+	delete topology;
+
 	exit(EXIT_SUCCESS);
 }
 
