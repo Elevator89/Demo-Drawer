@@ -75,6 +75,7 @@
 		<Unit filename="src/Drawing/Colors/RandomColorGenerator.h" />
 		<Unit filename="src/Drawing/Colors/SingleColorGenerator.cpp" />
 		<Unit filename="src/Drawing/Colors/SingleColorGenerator.h" />
+		<Unit filename="src/Drawing/Drawers/DrawerType.h" />
 		<Unit filename="src/Drawing/Drawers/IDrawer.h" />
 		<Unit filename="src/Drawing/Drawers/QueuePopWithChanceDrawer.cpp" />
 		<Unit filename="src/Drawing/Drawers/QueuePopWithChanceDrawer.h" />

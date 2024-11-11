@@ -16,6 +16,8 @@
 #include "Drawing/Colors/BouncingColorGenerator.h"
 #include "Drawing/Colors/FilteredColorGenerator.h"
 #include "Drawing/Colors/LowPassColorFilter.h"
+#include "Drawing/Drawers/DrawerType.h"
+#include "Drawing/Drawers/RandomDrawer.h"
 #include "Drawing/Drawers/QueuePopWithChanceDrawer.h"
 #include "Drawing/Drawers/StackPopWithChanceDrawer.h"
 #include "Drawing/Drawers/QueuePushWithChanceDrawer.h"
@@ -25,14 +27,22 @@
 char* getCmdOption(char** begin, char** end, const std::string & option);
 bool cmdOptionExists(char** begin, char** end, const std::string& option);
 
+void switchDrawer(DrawerType drawerType);
+IDrawer* createDrawer(DrawerType drawerType);
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void error_callback(int error, const char* description);
 
 // Window dimensions
-GLuint width = 1024;
-GLuint height = 768;
-float dotsPerStep = 100.0f;
+GLuint m_width = 1024;
+GLuint m_height = 768;
+float m_dotsPerStep = 100.0f;
+
+ITopology* m_topology;
+IColorFilter* m_colorFilter;
+IDrawer* m_drawer;
+DrawerType m_currentDrawerType;
+IColorGenerator* m_colorGenerator;
 
 // The MAIN function, from here we start the application and run the game loop
 int main(int argc, char * argv[])
@@ -52,15 +62,15 @@ int main(int argc, char * argv[])
 	{
 		GLFWmonitor* primaryMonitor = glfwGetPrimaryMonitor();
 		const GLFWvidmode* mode = glfwGetVideoMode(primaryMonitor);
-		width = mode->width;
-		height = mode->height;
+		m_width = mode->width;
+		m_height = mode->height;
 
-		window = glfwCreateWindow(width, height, "Texture streaming demo", primaryMonitor, nullptr);
-		glfwSetWindowMonitor(window, primaryMonitor, 0, 0, width, height, mode->refreshRate);
+		window = glfwCreateWindow(m_width, m_height, "Texture streaming demo", primaryMonitor, nullptr);
+		glfwSetWindowMonitor(window, primaryMonitor, 0, 0, m_width, m_height, mode->refreshRate);
 	}
 	else
 	{
-		window = glfwCreateWindow(width, height, "Texture streaming demo", nullptr, nullptr);
+		window = glfwCreateWindow(m_width, m_height, "Texture streaming demo", nullptr, nullptr);
 	}
 
 	glfwMakeContextCurrent(window);
@@ -76,7 +86,7 @@ int main(int argc, char * argv[])
 	glewInit();
 
 	// Define the viewport dimensions
-	glViewport(0, 0, width, height);
+	glViewport(0, 0, m_width, m_height);
 
 	GLuint shaderProgram = LoadAndBuildShaderProgram("shaders/tex.vert", "shaders/tex.frag");
 
@@ -129,19 +139,20 @@ int main(int argc, char * argv[])
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-	Field<uint32_t> field(width, height, 0x00000000);
+	Field<uint32_t> field(m_width, m_height, 0x00000000);
 
 
-	ITopology* topology = new ThorusTopology(width, height);
+	m_topology = new ThorusTopology(m_width, m_height);
 
-	IColorFilter* colorFilter = new LowPassColorFilter(6, 0.2f);
+	m_colorFilter = new LowPassColorFilter(6, 0.2f);
 
 	//IColorGenerator* colorGenerator = new SingleColorGenerator((uint32_t)Color::White);
 	//IColorGenerator* baseColorGenerator = new RandomColorGenerator();
 	//IColorGenerator* colorGenerator = new FilteredColorGenerator(baseColorGenerator, colorFilter);
-	IColorGenerator* colorGenerator = new BouncingColorGenerator(0.000001f, 0.000003f, 0.000011f);
+	m_colorGenerator = new BouncingColorGenerator(0.000001f, 0.000003f, 0.000011f);
 
-	IDrawer* generator = new QueuePushWithChanceDrawer(topology, colorGenerator, 0.5f, 0.95f);
+	//IDrawer* generator = new QueuePushWithChanceDrawer(m_topology, colorGenerator, 0.5f, 0.95f);
+	m_drawer = new QueuePopWithChanceDrawer(m_topology, m_colorGenerator, 0.59f, 0.9999f);
 
 	// Load, create texture and generate mipmaps
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, field.GetWidth(), field.GetHeight(), 0, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8, field.GetData());
@@ -160,7 +171,7 @@ int main(int argc, char * argv[])
 		// Check if any events have been activiated (key pressed, mouse moved etc.) and call corresponding response functions
 		glfwPollEvents();
 
-		dotsToDraw += dotsPerStep;
+		dotsToDraw += m_dotsPerStep;
 
 		if(dotsToDraw >= 1.0f)
 		{
@@ -168,7 +179,7 @@ int main(int argc, char * argv[])
 			dotsToDraw -= dotsToDrawThisFrame;
 
 			for(unsigned int i= 0; i < dotsToDrawThisFrame; ++i)
-				generator->Draw(field);
+				m_drawer->Draw(field);
 		}
 
 		// Render
@@ -208,10 +219,10 @@ int main(int argc, char * argv[])
 
 	glfwTerminate();
 
-	delete drawer;
-	delete colorGenerator;
-	delete colorFilter;
-	delete topology;
+	delete m_drawer;
+	delete m_colorGenerator;
+	delete m_colorFilter;
+	delete m_topology;
 
 	exit(EXIT_SUCCESS);
 }
@@ -236,14 +247,43 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 {
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, GL_TRUE);
+	else if(key >= GLFW_KEY_0 && key <= GLFW_KEY_9 && action == GLFW_PRESS)
+		switchDrawer(DrawerType(key-GLFW_KEY_0));
+}
+
+void switchDrawer(DrawerType drawerType)
+{
+	if(m_currentDrawerType == drawerType) return;
+	m_currentDrawerType = drawerType;
+
+	delete m_drawer;
+	m_drawer = createDrawer(drawerType);
+}
+
+IDrawer* createDrawer(DrawerType drawerType)
+{
+	switch(drawerType)
+	{
+	case DrawerType::StackPopWithChance:
+		return new StackPopWithChanceDrawer(m_topology, m_colorGenerator, 0.59f, 0.9999f);
+	case DrawerType::StackPushWithChance:
+		return new StackPushWithChanceDrawer(m_topology, m_colorGenerator, 0.59f, 0.9999f);
+	case DrawerType::QueuePopWithChance:
+		return new QueuePopWithChanceDrawer(m_topology, m_colorGenerator, 0.59f, 0.9999f);
+	case DrawerType::QueuePushWithChance:
+		return new QueuePushWithChanceDrawer(m_topology, m_colorGenerator, 0.59f, 0.9999f);
+	case DrawerType::Random:
+	default:
+		return new RandomDrawer(m_colorGenerator);
+	}
 }
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
-	dotsPerStep = dotsPerStep * pow(2.0, yoffset);
-	if(dotsPerStep < 1/60.0f)
-		dotsPerStep = 1/60.0f;
-	std::cout << "Dots per step = " << dotsPerStep << std::endl;
+	m_dotsPerStep = m_dotsPerStep * pow(2.0, yoffset);
+	if(m_dotsPerStep < 1/60.0f)
+		m_dotsPerStep = 1/60.0f;
+	std::cout << "Dots per step = " << m_dotsPerStep << std::endl;
 }
 
 void error_callback(int error, const char* description)
