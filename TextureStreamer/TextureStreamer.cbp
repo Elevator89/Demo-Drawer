@@ -14,6 +14,7 @@
 				<Option parameters="-f" />
 				<Compiler>
 					<Add option="-g" />
+					<Add directory="src/Drawing/Drawers" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
@@ -23,6 +24,7 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add directory="src/Drawing/Drawers" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -75,18 +77,32 @@
 		<Unit filename="src/Drawing/Colors/RandomColorGenerator.h" />
 		<Unit filename="src/Drawing/Colors/SingleColorGenerator.cpp" />
 		<Unit filename="src/Drawing/Colors/SingleColorGenerator.h" />
+		<Unit filename="src/Drawing/Drawers/ChanceBasedPointPicker.cpp" />
+		<Unit filename="src/Drawing/Drawers/ChanceBasedPointPicker.h" />
+		<Unit filename="src/Drawing/Drawers/ChanceBasedPointsTraverser.cpp" />
+		<Unit filename="src/Drawing/Drawers/ChanceBasedPointsTraverser.h" />
 		<Unit filename="src/Drawing/Drawers/DrawerType.h" />
 		<Unit filename="src/Drawing/Drawers/IDrawer.h" />
+		<Unit filename="src/Drawing/Drawers/IPointPicker.h" />
+		<Unit filename="src/Drawing/Drawers/IPointsTraverser.h" />
+		<Unit filename="src/Drawing/Drawers/Neighbour4PointsTraverser.cpp" />
+		<Unit filename="src/Drawing/Drawers/Neighbour4PointsTraverser.h" />
+		<Unit filename="src/Drawing/Drawers/PointFromEndPicker.cpp" />
+		<Unit filename="src/Drawing/Drawers/PointFromEndPicker.h" />
+		<Unit filename="src/Drawing/Drawers/PointFromStartPicker.cpp" />
+		<Unit filename="src/Drawing/Drawers/PointFromStartPicker.h" />
+		<Unit filename="src/Drawing/Drawers/PointsTraverserDrawer.cpp" />
+		<Unit filename="src/Drawing/Drawers/PointsTraverserDrawer.h" />
 		<Unit filename="src/Drawing/Drawers/QueuePopWithChanceDrawer.cpp" />
 		<Unit filename="src/Drawing/Drawers/QueuePopWithChanceDrawer.h" />
 		<Unit filename="src/Drawing/Drawers/QueuePushWithChanceDrawer.cpp" />
 		<Unit filename="src/Drawing/Drawers/QueuePushWithChanceDrawer.h" />
 		<Unit filename="src/Drawing/Drawers/RandomDrawer.cpp" />
 		<Unit filename="src/Drawing/Drawers/RandomDrawer.h" />
+		<Unit filename="src/Drawing/Drawers/RandomPointPicker.cpp" />
+		<Unit filename="src/Drawing/Drawers/RandomPointPicker.h" />
 		<Unit filename="src/Drawing/Drawers/StackPopWithChanceDrawer.cpp" />
 		<Unit filename="src/Drawing/Drawers/StackPopWithChanceDrawer.h" />
-		<Unit filename="src/Drawing/Drawers/StackPushWithChanceDrawer.cpp" />
-		<Unit filename="src/Drawing/Drawers/StackPushWithChanceDrawer.h" />
 		<Unit filename="src/Drawing/Field.h" />
 		<Unit filename="src/Drawing/Point.cpp" />
 		<Unit filename="src/Drawing/Point.h" />

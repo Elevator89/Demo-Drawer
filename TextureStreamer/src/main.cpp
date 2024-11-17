@@ -22,6 +22,14 @@
 #include "Drawing/Drawers/StackPopWithChanceDrawer.h"
 #include "Drawing/Drawers/QueuePushWithChanceDrawer.h"
 #include "Drawing/Drawers/StackPushWithChanceDrawer.h"
+#include "Drawing/Drawers/IPointPicker.h"
+#include "Drawing/Drawers/PointFromStartPicker.h"
+#include "Drawing/Drawers/PointFromEndPicker.h"
+#include "Drawing/Drawers/RandomPointPicker.h"
+#include "Drawing/Drawers/IPointsTraverser.h"
+#include "Drawing/Drawers/Neighbour4PointsTraverser.h"
+#include "Drawing/Drawers/ChanceBasedPointsTraverser.h"
+#include "Drawing/Drawers/PointsTraverserDrawer.h"
 
 // Function prototypes
 char* getCmdOption(char** begin, char** end, const std::string & option);
@@ -152,7 +160,14 @@ int main(int argc, char * argv[])
 	m_colorGenerator = new BouncingColorGenerator(0.000001f, 0.000003f, 0.000011f);
 
 	//IDrawer* generator = new QueuePushWithChanceDrawer(m_topology, colorGenerator, 0.5f, 0.95f);
-	m_drawer = new QueuePopWithChanceDrawer(m_topology, m_colorGenerator, 0.59f, 0.9999f);
+
+	std::default_random_engine* randomGenerator = new std::default_random_engine();
+
+	IPointPicker* pointPicker = new PointFromStartPicker();
+	IPointsTraverser* innerPointsTraverser = new Neighbour4PointsTraverser();
+	IPointsTraverser* pointsTraverser = new ChanceBasedPointsTraverser(innerPointsTraverser, randomGenerator, 0.59f);
+
+	m_drawer = new PointsTraverserDrawer(m_topology, pointPicker, pointsTraverser, m_colorGenerator, 0.9f, randomGenerator);
 
 	// Load, create texture and generate mipmaps
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, field.GetWidth(), field.GetHeight(), 0, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8, field.GetData());
