@@ -16,7 +16,8 @@
 #include "Drawing/Colors/BouncingColorGenerator.h"
 #include "Drawing/Colors/FilteredColorGenerator.h"
 #include "Drawing/Colors/LowPassColorFilter.h"
-#include "Drawing/Drawers/DrawerType.h"
+#include "Drawing/Drawers/PickerType.h"
+#include "Drawing/Drawers/PointsTraverserType.h"
 #include "Drawing/Drawers/RandomDrawer.h"
 #include "Drawing/Drawers/QueuePopWithChanceDrawer.h"
 #include "Drawing/Drawers/StackPopWithChanceDrawer.h"
@@ -35,8 +36,12 @@
 char* getCmdOption(char** begin, char** end, const std::string & option);
 bool cmdOptionExists(char** begin, char** end, const std::string& option);
 
-void switchDrawer(DrawerType drawerType);
-IDrawer* createDrawer(DrawerType drawerType);
+void switchPointsTraverser(PointsTraverserType traverserType);
+IPointsTraverser* createPointsTraverser(PointsTraverserType traverserType);
+
+void switchPicker(PickerType pickerType);
+IPointPicker* createPicker(PickerType pickerType);
+
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void error_callback(int error, const char* description);
@@ -46,10 +51,19 @@ GLuint m_width = 1024;
 GLuint m_height = 768;
 float m_dotsPerStep = 100.0f;
 
+std::default_random_engine* m_randomGenerator;
+
 ITopology* m_topology;
 IColorFilter* m_colorFilter;
-IDrawer* m_drawer;
-DrawerType m_currentDrawerType;
+PointsTraverserDrawer* m_drawer;
+
+IPointPicker* m_pointPicker;
+PickerType m_currentPickerType = PickerType::Random;
+
+IPointsTraverser* m_pointsTraverser;
+PointsTraverserType m_pointsTraverserType = PointsTraverserType::Neighbour4;
+
+
 IColorGenerator* m_colorGenerator;
 
 // The MAIN function, from here we start the application and run the game loop
@@ -161,13 +175,12 @@ int main(int argc, char * argv[])
 
 	//IDrawer* generator = new QueuePushWithChanceDrawer(m_topology, colorGenerator, 0.5f, 0.95f);
 
-	std::default_random_engine* randomGenerator = new std::default_random_engine();
+	m_randomGenerator = new std::default_random_engine();
 
-	IPointPicker* pointPicker = new PointFromStartPicker();
-	IPointsTraverser* innerPointsTraverser = new Neighbour4PointsTraverser();
-	IPointsTraverser* pointsTraverser = new ChanceBasedPointsTraverser(innerPointsTraverser, randomGenerator, 0.59f);
+	m_pointPicker = createPicker(m_currentPickerType);
+	m_pointsTraverser = createPointsTraverser(m_pointsTraverserType);
 
-	m_drawer = new PointsTraverserDrawer(m_topology, pointPicker, pointsTraverser, m_colorGenerator, 0.9f, randomGenerator);
+	m_drawer = new PointsTraverserDrawer(m_topology, m_pointPicker, m_pointsTraverser, m_colorGenerator, 0.9f, m_randomGenerator);
 
 	// Load, create texture and generate mipmaps
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, field.GetWidth(), field.GetHeight(), 0, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8, field.GetData());
@@ -262,34 +275,20 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 {
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, GL_TRUE);
-	else if(key >= GLFW_KEY_0 && key <= GLFW_KEY_9 && action == GLFW_PRESS)
-		switchDrawer(DrawerType(key-GLFW_KEY_0));
-}
 
-void switchDrawer(DrawerType drawerType)
-{
-	if(m_currentDrawerType == drawerType) return;
-	m_currentDrawerType = drawerType;
-
-	delete m_drawer;
-	m_drawer = createDrawer(drawerType);
-}
-
-IDrawer* createDrawer(DrawerType drawerType)
-{
-	switch(drawerType)
+	if(action == GLFW_PRESS)
 	{
-	case DrawerType::StackPopWithChance:
-		return new StackPopWithChanceDrawer(m_topology, m_colorGenerator, 0.59f, 0.9999f);
-	case DrawerType::StackPushWithChance:
-		return new StackPushWithChanceDrawer(m_topology, m_colorGenerator, 0.59f, 0.9999f);
-	case DrawerType::QueuePopWithChance:
-		return new QueuePopWithChanceDrawer(m_topology, m_colorGenerator, 0.59f, 0.9999f);
-	case DrawerType::QueuePushWithChance:
-		return new QueuePushWithChanceDrawer(m_topology, m_colorGenerator, 0.59f, 0.9999f);
-	case DrawerType::Random:
-	default:
-		return new RandomDrawer(m_colorGenerator);
+		if(key == GLFW_KEY_1)
+			switchPicker(PickerType::Random);
+		if(key == GLFW_KEY_2)
+			switchPicker(PickerType::FromStart);
+		if(key == GLFW_KEY_3)
+			switchPicker(PickerType::FromEnd);
+
+		if(key == GLFW_KEY_Q)
+			switchPointsTraverser(PointsTraverserType::Neighbour4);
+		if(key == GLFW_KEY_W)
+			switchPointsTraverser(PointsTraverserType::Neighbour4WithChance);
 	}
 }
 
@@ -304,4 +303,52 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 void error_callback(int error, const char* description)
 {
 	fprintf(stderr, "Error: %s\n", description);
+}
+
+void switchPointsTraverser(PointsTraverserType traverserType)
+{
+	if(m_pointsTraverserType == traverserType) return;
+	m_pointsTraverserType = traverserType;
+
+	delete m_pointsTraverser;
+	m_pointsTraverser = createPointsTraverser(m_pointsTraverserType);
+	m_drawer->SetPointsTraverser(m_pointsTraverser);
+}
+
+IPointsTraverser* createPointsTraverser(PointsTraverserType traverserType)
+{
+	IPointsTraverser* neighbour4PointsTraverser = new Neighbour4PointsTraverser();
+
+	switch(traverserType)
+	{
+	case PointsTraverserType::Neighbour4WithChance:
+		return new ChanceBasedPointsTraverser(neighbour4PointsTraverser, m_randomGenerator, 0.59f);
+	case PointsTraverserType::Neighbour4:
+	default:
+		return neighbour4PointsTraverser;
+	}
+}
+
+void switchPicker(PickerType pickerType)
+{
+	if(m_currentPickerType == pickerType) return;
+	m_currentPickerType = pickerType;
+
+	delete m_pointPicker;
+	m_pointPicker = createPicker(m_currentPickerType);
+	m_drawer->SetPointPicker(m_pointPicker);
+}
+
+IPointPicker* createPicker(PickerType pickerType)
+{
+	switch(pickerType)
+	{
+	case PickerType::FromStart:
+		return new PointFromStartPicker();
+	case PickerType::FromEnd:
+		return new PointFromEndPicker();
+	case PickerType::Random:
+	default:
+		return new RandomPointPicker(m_randomGenerator);
+	}
 }

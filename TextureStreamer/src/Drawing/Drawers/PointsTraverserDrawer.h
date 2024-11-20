@@ -17,6 +17,36 @@ public:
 
 	void Draw(Field<uint32_t>& field) override;
 
+	inline const ITopology* GetTopology() const
+	{
+		return m_topology;
+	}
+
+	inline void SetTopology(const ITopology* topology)
+	{
+		m_topology = topology;
+	}
+
+	inline const IPointPicker* GetPointPicker() const
+	{
+		return m_pointPicker;
+	}
+
+	inline void SetPointPicker(const IPointPicker* pointPicker)
+	{
+		m_pointPicker = pointPicker;
+	}
+
+	inline const IPointsTraverser* GetPointsTraverser() const
+	{
+		return m_pointsTraverser;
+	}
+
+	inline void SetPointsTraverser(const IPointsTraverser* pointsTraverser)
+	{
+		m_pointsTraverser = pointsTraverser;
+	}
+
 private:
 	const ITopology* m_topology;
 	const IPointPicker* m_pointPicker;
@@ -25,6 +55,6 @@ private:
 	float m_fieldFillBeforeFlush;
 
 	std::default_random_engine* m_randomGenerator;
-    std::vector<Point> m_pointsToVisit;
+	std::vector<Point> m_pointsToVisit;
 	std::unordered_set<Point> m_visitedPoints;
 };
