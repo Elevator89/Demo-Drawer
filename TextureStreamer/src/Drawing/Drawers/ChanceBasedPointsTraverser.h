@@ -13,7 +13,7 @@ public:
 	ChanceBasedPointsTraverser(const IPointsTraverser* m_traverserToDecorate, std::default_random_engine* randomGenerator, float chanceToReturn);
 	virtual ~ChanceBasedPointsTraverser();
 
-	virtual const std::vector<Point> GetNextPoints(const Point& point, const ITopology* topology, std::unordered_set<Point>& visitedPoints) const override;
+	virtual void GetNextPoints(const Point& point, const ITopology* topology, std::unordered_set<Point>& visitedPoints, std::vector<Point>& nextPoints) const override;
 
 	inline float GetChanceToReturn() const
 	{

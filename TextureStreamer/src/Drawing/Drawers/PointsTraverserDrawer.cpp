@@ -32,19 +32,24 @@ void PointsTraverserDrawer::Draw(Field<uint32_t>& field)
 		m_visitedPoints.insert(newPoint);
 	}
 
-	std::vector<Point>::const_iterator pointToVisit = m_pointPicker->PickPoint(m_pointsToVisit);
-	if(pointToVisit == m_pointsToVisit.cend()) return;
+	std::vector<Point>::const_iterator pointToVisitIt = m_pointPicker->PickPoint(m_pointsToVisit);
+	if(pointToVisitIt == m_pointsToVisit.cend()) return;
 
-	field.SetCell(*pointToVisit, m_colorGenerator->GenerateColor());
-	m_pointsToVisit.erase(pointToVisit);
+	Point pointToVisit = *pointToVisitIt;
 
-	const std::vector<Point> nextPoints = m_pointsTraverser->GetNextPoints(*pointToVisit, m_topology, m_visitedPoints);
+	field.SetCell(pointToVisit, m_colorGenerator->GenerateColor());
+	m_pointsToVisit.erase(pointToVisitIt);
 
-	for(std::vector<Point>::const_iterator nextPoint = nextPoints.cbegin(); nextPoint != nextPoints.cend(); ++nextPoint)
+	std::vector<Point> nextPoints;
+
+	m_pointsTraverser->GetNextPoints(pointToVisit, m_topology, m_visitedPoints, nextPoints);
+
+	for(std::vector<Point>::const_iterator nextPointIt = nextPoints.cbegin(); nextPointIt != nextPoints.cend(); ++nextPointIt)
 	{
-		m_visitedPoints.insert(*nextPoint);
-		m_pointsToVisit.push_back(*nextPoint);
+		Point nextPoint = *nextPointIt;
+		m_visitedPoints.insert(nextPoint);
+		m_pointsToVisit.push_back(nextPoint);
 
-		field.SetCell(*nextPoint, (uint32_t)Color::White);
+		field.SetCell(nextPoint, (uint32_t)Color::White);
 	}
 }

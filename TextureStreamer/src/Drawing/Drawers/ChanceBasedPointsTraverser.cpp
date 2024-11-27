@@ -8,19 +8,17 @@ ChanceBasedPointsTraverser::ChanceBasedPointsTraverser(const IPointsTraverser* t
 
 ChanceBasedPointsTraverser::~ChanceBasedPointsTraverser() {}
 
-const std::vector<Point> ChanceBasedPointsTraverser::GetNextPoints(const Point& point, const ITopology* topology, std::unordered_set<Point>& visitedPoints) const
+void ChanceBasedPointsTraverser::GetNextPoints(const Point& point, const ITopology* topology, std::unordered_set<Point>& visitedPoints, std::vector<Point>& nextPoints) const
 {
-	const std::vector<Point> nextPointsToFilter = m_traverserToDecorate->GetNextPoints(point, topology, visitedPoints);
+	std::vector<Point> nextPointsToFilter;
+
+	m_traverserToDecorate->GetNextPoints(point, topology, visitedPoints, nextPointsToFilter);
 
 	std::discrete_distribution<bool> chanceDistribution{1.0f - m_chanceToReturn, m_chanceToReturn};
-
-	std::vector<Point> nextPoints;
 
 	for(std::vector<Point>::const_iterator nextPointToFilter = nextPointsToFilter.cbegin(); nextPointToFilter != nextPointsToFilter.cend(); ++nextPointToFilter)
 	{
 		if(chanceDistribution(*m_randomGenerator))
 			nextPoints.push_back(*nextPointToFilter);
 	}
-
-	return nextPoints;
 }

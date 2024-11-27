@@ -9,5 +9,5 @@ class IPointsTraverser
 {
 public:
 	virtual ~IPointsTraverser() {}
-	virtual const std::vector<Point> GetNextPoints(const Point& point, const ITopology* topology, std::unordered_set<Point>& visitedPoints) const = 0;
+	virtual void GetNextPoints(const Point& point, const ITopology* topology, std::unordered_set<Point>& visitedPoints, std::vector<Point>& nextPoints) const = 0;
 };
