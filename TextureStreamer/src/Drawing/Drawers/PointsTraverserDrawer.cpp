@@ -2,9 +2,10 @@
 #include "Drawing/Colors/Color.h"
 #include "PointsTraverserDrawer.h"
 
-PointsTraverserDrawer::PointsTraverserDrawer(const ITopology* topology, const IPointPicker* pointPicker, const IPointsTraverser* pointsTraverser, IColorGenerator* colorGenerator, float fieldFillBeforeFlush, std::default_random_engine* randomGenerator):
+PointsTraverserDrawer::PointsTraverserDrawer(const ITopology* topology, const IPointPicker* pointPicker, const IPointPusher* pointPusher, const IPointsTraverser* pointsTraverser, IColorGenerator* colorGenerator, float fieldFillBeforeFlush, std::default_random_engine* randomGenerator):
 	m_topology(topology),
 	m_pointPicker(pointPicker),
+	m_pointPusher(pointPusher),
 	m_pointsTraverser(pointsTraverser),
 	m_colorGenerator(colorGenerator),
 	m_fieldFillBeforeFlush(fieldFillBeforeFlush),
@@ -48,7 +49,7 @@ void PointsTraverserDrawer::Draw(Field<uint32_t>& field)
 	{
 		Point nextPoint = *nextPointIt;
 		m_visitedPoints.insert(nextPoint);
-		m_pointsToVisit.push_back(nextPoint);
+		m_pointPusher->PushPoint(m_pointsToVisit, nextPoint);
 
 		field.SetCell(nextPoint, (uint32_t)Color::White);
 	}

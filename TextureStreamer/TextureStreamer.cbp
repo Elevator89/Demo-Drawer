@@ -78,10 +78,13 @@
 		<Unit filename="src/Drawing/Colors/SingleColorGenerator.h" />
 		<Unit filename="src/Drawing/Drawers/ChanceBasedPointPicker.cpp" />
 		<Unit filename="src/Drawing/Drawers/ChanceBasedPointPicker.h" />
+		<Unit filename="src/Drawing/Drawers/ChanceBasedPointPusher.cpp" />
+		<Unit filename="src/Drawing/Drawers/ChanceBasedPointPusher.h" />
 		<Unit filename="src/Drawing/Drawers/ChanceBasedPointsTraverser.cpp" />
 		<Unit filename="src/Drawing/Drawers/ChanceBasedPointsTraverser.h" />
 		<Unit filename="src/Drawing/Drawers/IDrawer.h" />
 		<Unit filename="src/Drawing/Drawers/IPointPicker.h" />
+		<Unit filename="src/Drawing/Drawers/IPointPusher.h" />
 		<Unit filename="src/Drawing/Drawers/IPointsTraverser.h" />
 		<Unit filename="src/Drawing/Drawers/Neighbour4PointsTraverser.cpp" />
 		<Unit filename="src/Drawing/Drawers/Neighbour4PointsTraverser.h" />
@@ -90,6 +93,10 @@
 		<Unit filename="src/Drawing/Drawers/PointFromEndPicker.h" />
 		<Unit filename="src/Drawing/Drawers/PointFromStartPicker.cpp" />
 		<Unit filename="src/Drawing/Drawers/PointFromStartPicker.h" />
+		<Unit filename="src/Drawing/Drawers/PointToEndPusher.cpp" />
+		<Unit filename="src/Drawing/Drawers/PointToEndPusher.h" />
+		<Unit filename="src/Drawing/Drawers/PointToStartPusher.cpp" />
+		<Unit filename="src/Drawing/Drawers/PointToStartPusher.h" />
 		<Unit filename="src/Drawing/Drawers/PointsTraverserDrawer.cpp" />
 		<Unit filename="src/Drawing/Drawers/PointsTraverserDrawer.h" />
 		<Unit filename="src/Drawing/Drawers/PointsTraverserType.h" />
@@ -101,6 +108,8 @@
 		<Unit filename="src/Drawing/Drawers/RandomDrawer.h" />
 		<Unit filename="src/Drawing/Drawers/RandomPointPicker.cpp" />
 		<Unit filename="src/Drawing/Drawers/RandomPointPicker.h" />
+		<Unit filename="src/Drawing/Drawers/RandomPointPusher.cpp" />
+		<Unit filename="src/Drawing/Drawers/RandomPointPusher.h" />
 		<Unit filename="src/Drawing/Drawers/StackPopWithChanceDrawer.cpp" />
 		<Unit filename="src/Drawing/Drawers/StackPopWithChanceDrawer.h" />
 		<Unit filename="src/Drawing/Field.h" />

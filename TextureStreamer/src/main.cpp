@@ -27,6 +27,12 @@
 #include "Drawing/Drawers/PointFromStartPicker.h"
 #include "Drawing/Drawers/PointFromEndPicker.h"
 #include "Drawing/Drawers/RandomPointPicker.h"
+#include "Drawing/Drawers/ChanceBasedPointPicker.h"
+#include "Drawing/Drawers/IPointPusher.h"
+#include "Drawing/Drawers/PointToStartPusher.h"
+#include "Drawing/Drawers/PointToEndPusher.h"
+#include "Drawing/Drawers/RandomPointPusher.h"
+#include "Drawing/Drawers/ChanceBasedPointPusher.h"
 #include "Drawing/Drawers/IPointsTraverser.h"
 #include "Drawing/Drawers/Neighbour4PointsTraverser.h"
 #include "Drawing/Drawers/ChanceBasedPointsTraverser.h"
@@ -40,7 +46,9 @@ void switchPointsTraverser(PointsTraverserType traverserType);
 IPointsTraverser* createPointsTraverser(PointsTraverserType traverserType);
 
 void switchPicker(PickerType pickerType);
+void switchPusher(PickerType pickerType);
 IPointPicker* createPicker(PickerType pickerType);
+IPointPusher* createPusher(PickerType pusherType);
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
@@ -58,7 +66,9 @@ IColorFilter* m_colorFilter;
 PointsTraverserDrawer* m_drawer;
 
 IPointPicker* m_pointPicker;
+IPointPusher* m_pointPusher;
 PickerType m_currentPickerType = PickerType::Random;
+PickerType m_currentPusherType = PickerType::Random;
 
 IPointsTraverser* m_pointsTraverser;
 PointsTraverserType m_pointsTraverserType = PointsTraverserType::Neighbour4;
@@ -178,9 +188,10 @@ int main(int argc, char * argv[])
 	m_randomGenerator = new std::default_random_engine();
 
 	m_pointPicker = createPicker(m_currentPickerType);
+	m_pointPusher = createPusher(m_currentPusherType);
 	m_pointsTraverser = createPointsTraverser(m_pointsTraverserType);
 
-	m_drawer = new PointsTraverserDrawer(m_topology, m_pointPicker, m_pointsTraverser, m_colorGenerator, 0.9f, m_randomGenerator);
+	m_drawer = new PointsTraverserDrawer(m_topology, m_pointPicker, m_pointPusher, m_pointsTraverser, m_colorGenerator, 0.9f, m_randomGenerator);
 
 	// Load, create texture and generate mipmaps
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, field.GetWidth(), field.GetHeight(), 0, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8, field.GetData());
@@ -284,6 +295,25 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 			switchPicker(PickerType::FromStart);
 		if(key == GLFW_KEY_3)
 			switchPicker(PickerType::FromEnd);
+		if(key == GLFW_KEY_4)
+			switchPicker(PickerType::RandomWithChance);
+		if(key == GLFW_KEY_5)
+			switchPicker(PickerType::FromStartWithChance);
+		if(key == GLFW_KEY_6)
+			switchPicker(PickerType::FromEndWithChance);
+
+		if(key == GLFW_KEY_KP_1)
+			switchPusher(PickerType::Random);
+		if(key == GLFW_KEY_KP_2)
+			switchPusher(PickerType::FromStart);
+		if(key == GLFW_KEY_KP_3)
+			switchPusher(PickerType::FromEnd);
+		if(key == GLFW_KEY_KP_4)
+			switchPusher(PickerType::RandomWithChance);
+		if(key == GLFW_KEY_KP_5)
+			switchPusher(PickerType::FromStartWithChance);
+		if(key == GLFW_KEY_KP_6)
+			switchPusher(PickerType::FromEndWithChance);
 
 		if(key == GLFW_KEY_Q)
 			switchPointsTraverser(PointsTraverserType::Neighbour4);
@@ -329,6 +359,16 @@ IPointsTraverser* createPointsTraverser(PointsTraverserType traverserType)
 	}
 }
 
+void switchPusher(PickerType pickerType)
+{
+	if(m_currentPusherType == pickerType) return;
+	m_currentPusherType = pickerType;
+
+	delete m_pointPusher;
+	m_pointPusher = createPusher(m_currentPusherType);
+	m_drawer->SetPointPusher(m_pointPusher);
+}
+
 void switchPicker(PickerType pickerType)
 {
 	if(m_currentPickerType == pickerType) return;
@@ -348,7 +388,35 @@ IPointPicker* createPicker(PickerType pickerType)
 	case PickerType::FromEnd:
 		return new PointFromEndPicker();
 	case PickerType::Random:
+		return new RandomPointPicker(m_randomGenerator);
+	case PickerType::FromStartWithChance:
+		return new ChanceBasedPointPicker(new PointFromStartPicker(), m_randomGenerator, 0.5f);
+	case PickerType::FromEndWithChance:
+		return new ChanceBasedPointPicker(new PointFromEndPicker(), m_randomGenerator, 0.5f);
+	case PickerType::RandomWithChance:
+		return new ChanceBasedPointPicker(new RandomPointPicker(m_randomGenerator), m_randomGenerator, 0.5f);
 	default:
 		return new RandomPointPicker(m_randomGenerator);
+	}
+}
+
+IPointPusher* createPusher(PickerType pickerType)
+{
+	switch(pickerType)
+	{
+	case PickerType::FromStart:
+		return new PointToStartPusher();
+	case PickerType::FromEnd:
+		return new PointToEndPusher();
+	case PickerType::Random:
+		return new RandomPointPusher(m_randomGenerator);
+	case PickerType::FromStartWithChance:
+		return new ChanceBasedPointPusher(new PointToStartPusher(), m_randomGenerator, 0.5f);
+	case PickerType::FromEndWithChance:
+		return new ChanceBasedPointPusher(new PointToEndPusher(), m_randomGenerator, 0.5f);
+	case PickerType::RandomWithChance:
+		return new ChanceBasedPointPusher(new RandomPointPusher(m_randomGenerator), m_randomGenerator, 0.5f);
+	default:
+		return new RandomPointPusher(m_randomGenerator);
 	}
 }

@@ -7,12 +7,13 @@
 #include "Drawing/Colors/IColorGenerator.h"
 #include "Drawing/Drawers/IPointsTraverser.h"
 #include "Drawing/Drawers/IPointPicker.h"
+#include "Drawing/Drawers/IPointPusher.h"
 #include "Drawing/Drawers/IDrawer.h"
 
 class PointsTraverserDrawer : public IDrawer
 {
 public:
-	PointsTraverserDrawer(const ITopology* topology, const IPointPicker* pointPicker, const IPointsTraverser* pointsTraverser, IColorGenerator* colorGenerator, float fieldFillBeforeFlush, std::default_random_engine* randomGenerator);
+	PointsTraverserDrawer(const ITopology* topology, const IPointPicker* pointPicker, const IPointPusher* pointPusher, const IPointsTraverser* pointsTraverser, IColorGenerator* colorGenerator, float fieldFillBeforeFlush, std::default_random_engine* randomGenerator);
 	virtual ~PointsTraverserDrawer();
 
 	void Draw(Field<uint32_t>& field) override;
@@ -37,6 +38,11 @@ public:
 		m_pointPicker = pointPicker;
 	}
 
+	inline void SetPointPusher(const IPointPusher* pointPusher)
+	{
+		m_pointPusher = pointPusher;
+	}
+
 	inline const IPointsTraverser* GetPointsTraverser() const
 	{
 		return m_pointsTraverser;
@@ -50,6 +56,7 @@ public:
 private:
 	const ITopology* m_topology;
 	const IPointPicker* m_pointPicker;
+	const IPointPusher* m_pointPusher;
 	const IPointsTraverser* m_pointsTraverser;
 	IColorGenerator* m_colorGenerator;
 	float m_fieldFillBeforeFlush;

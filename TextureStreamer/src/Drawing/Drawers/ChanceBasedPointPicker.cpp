@@ -6,7 +6,10 @@ ChanceBasedPointPicker::ChanceBasedPointPicker(const IPointPicker* pickerToDecor
 	m_chanceToPick(chanceToPick)
 {}
 
-ChanceBasedPointPicker::~ChanceBasedPointPicker() {}
+ChanceBasedPointPicker::~ChanceBasedPointPicker()
+{
+	delete m_pickerToDecorate;
+}
 
 std::vector<Point>::const_iterator ChanceBasedPointPicker::PickPoint(const std::vector<Point>& points) const
 {
