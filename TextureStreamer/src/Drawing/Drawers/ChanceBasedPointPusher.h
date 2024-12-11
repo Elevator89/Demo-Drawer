@@ -1,6 +1,6 @@
 #pragma once
 
-#include <vector>
+#include <list>
 #include <random>
 #include "Drawing/Drawers/IPointPusher.h"
 
@@ -10,7 +10,7 @@ public:
 	ChanceBasedPointPusher(const IPointPusher* pusherToDecorate, std::default_random_engine* randomGenerator, float chanceToPush);
 	virtual ~ChanceBasedPointPusher();
 
-	virtual void PushPoint(std::vector<Point>& points, const Point& pointToPush) const override;
+	virtual void PushPoint(std::list<Point>& points, const Point& pointToPush) const override;
 
 	inline float GetChanceToPush() const
 	{

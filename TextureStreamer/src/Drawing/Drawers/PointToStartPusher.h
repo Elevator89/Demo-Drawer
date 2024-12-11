@@ -1,6 +1,6 @@
 #pragma once
 
-#include <vector>
+#include <list>
 #include <random>
 #include "Drawing/Drawers/IPointPusher.h"
 
@@ -10,5 +10,5 @@ public:
 	PointToStartPusher();
 	virtual ~PointToStartPusher();
 
-	virtual void PushPoint(std::vector<Point>& points, const Point& pointToPush) const override;
+	virtual void PushPoint(std::list<Point>& points, const Point& pointToPush) const override;
 };

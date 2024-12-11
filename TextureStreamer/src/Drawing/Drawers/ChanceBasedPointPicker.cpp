@@ -11,7 +11,7 @@ ChanceBasedPointPicker::~ChanceBasedPointPicker()
 	delete m_pickerToDecorate;
 }
 
-std::vector<Point>::const_iterator ChanceBasedPointPicker::PickPoint(const std::vector<Point>& points) const
+std::list<Point>::const_iterator ChanceBasedPointPicker::PickPoint(const std::list<Point>& points) const
 {
 	std::discrete_distribution<bool> chanceDistribution{1.0f - m_chanceToPick, m_chanceToPick};
 

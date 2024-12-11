@@ -33,7 +33,7 @@ void PointsTraverserDrawer::Draw(Field<uint32_t>& field)
 		m_visitedPoints.insert(newPoint);
 	}
 
-	std::vector<Point>::const_iterator pointToVisitIt = m_pointPicker->PickPoint(m_pointsToVisit);
+	std::list<Point>::const_iterator pointToVisitIt = m_pointPicker->PickPoint(m_pointsToVisit);
 	if(pointToVisitIt == m_pointsToVisit.cend()) return;
 
 	Point pointToVisit = *pointToVisitIt;

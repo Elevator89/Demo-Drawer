@@ -1,7 +1,7 @@
 #pragma once
 
 #include <unordered_set>
-#include <vector>
+#include <list>
 #include "Drawing/Point.h"
 #include "Drawing/Topologies/ITopology.h"
 #include "Drawing/Colors/IColorGenerator.h"
@@ -62,6 +62,6 @@ private:
 	float m_fieldFillBeforeFlush;
 
 	std::default_random_engine* m_randomGenerator;
-	std::vector<Point> m_pointsToVisit;
+	std::list<Point> m_pointsToVisit;
 	std::unordered_set<Point> m_visitedPoints;
 };

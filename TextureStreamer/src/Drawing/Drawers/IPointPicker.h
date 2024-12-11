@@ -1,11 +1,11 @@
 #pragma once
 
-#include <vector>
+#include <list>
 #include "Drawing/Point.h"
 
 class IPointPicker
 {
 public:
 	virtual ~IPointPicker() {}
-	virtual std::vector<Point>::const_iterator PickPoint(const std::vector<Point>& points) const = 0;
+	virtual std::list<Point>::const_iterator PickPoint(const std::list<Point>& points) const = 0;
 };

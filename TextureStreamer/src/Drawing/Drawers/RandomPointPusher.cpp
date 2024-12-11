@@ -6,7 +6,7 @@ RandomPointPusher::RandomPointPusher(std::default_random_engine* generator):
 
 RandomPointPusher::~RandomPointPusher() {}
 
-void RandomPointPusher::PushPoint(std::vector<Point>& points, const Point& pointToPush) const
+void RandomPointPusher::PushPoint(std::list<Point>& points, const Point& pointToPush) const
 {
 	if(points.size() == 0)
 	{
@@ -15,7 +15,10 @@ void RandomPointPusher::PushPoint(std::vector<Point>& points, const Point& point
 	}
 
 	std::uniform_int_distribution<unsigned int> pointsLengthDistribution(0, points.size()-1);
-	std::vector<Point>::const_iterator randomPlace = points.cbegin() + pointsLengthDistribution(*m_generator);
 
-	points.insert(randomPlace, pointToPush);
+	std::list<Point>::const_iterator it = points.cbegin();
+	for(unsigned int i = 0; i < pointsLengthDistribution(*m_generator); ++i)
+		it++;
+
+	points.insert(it, pointToPush);
 }

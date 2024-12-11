@@ -11,7 +11,7 @@ ChanceBasedPointPusher::~ChanceBasedPointPusher()
 	delete m_pusherToDecorate;
 }
 
-void ChanceBasedPointPusher::PushPoint(std::vector<Point>& points, const Point& pointToPush) const
+void ChanceBasedPointPusher::PushPoint(std::list<Point>& points, const Point& pointToPush) const
 {
 	std::discrete_distribution<bool> chanceDistribution{1.0f - m_chanceToPush, m_chanceToPush};
 

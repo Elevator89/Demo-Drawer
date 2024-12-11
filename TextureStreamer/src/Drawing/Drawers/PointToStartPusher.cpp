@@ -3,7 +3,7 @@
 PointToStartPusher::PointToStartPusher() {}
 PointToStartPusher::~PointToStartPusher() {}
 
-void PointToStartPusher::PushPoint(std::vector<Point>& points, const Point& pointToPush) const
+void PointToStartPusher::PushPoint(std::list<Point>& points, const Point& pointToPush) const
 {
-	points.insert(points.cbegin(), pointToPush);
+	points.push_front(pointToPush);
 }

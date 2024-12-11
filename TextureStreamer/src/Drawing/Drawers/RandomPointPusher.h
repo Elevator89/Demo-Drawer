@@ -1,6 +1,6 @@
 #pragma once
 
-#include <vector>
+#include <list>
 #include <random>
 #include "Drawing/Drawers/IPointPusher.h"
 
@@ -10,7 +10,7 @@ public:
 	RandomPointPusher(std::default_random_engine* generator);
 	virtual ~RandomPointPusher();
 
-	virtual void PushPoint(std::vector<Point>& points, const Point& pointToPush) const override;
+	virtual void PushPoint(std::list<Point>& points, const Point& pointToPush) const override;
 
 private:
 	std::default_random_engine* m_generator;
