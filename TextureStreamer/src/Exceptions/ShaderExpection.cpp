@@ -6,26 +6,29 @@ using namespace std;
 
 string GetShaderTypeStr(ShaderType shaderType);
 
-ShaderExpection::ShaderExpection(ShaderType shaderType, GLuint shader, const GLchar* infoLog):
+ShaderException::ShaderException(ShaderType shaderType, GLuint shader, const GLchar* infoLog) :
 	m_shaderType(shaderType),
 	m_shader(shader),
 	m_infoLog(infoLog)
-{}
-
-ShaderExpection::~ShaderExpection() {}
-
-const char* ShaderExpection::what() const noexcept
 {
 	stringstream ss;
 	ss << "Shader exception. Shader: " << m_shader
-	   << ", type: " << GetShaderTypeStr(m_shaderType)
-	   << ", Message: " << m_infoLog;
-	return ss.str().c_str();
+		<< ", type: " << GetShaderTypeStr(m_shaderType)
+		<< ", Message: " << m_infoLog;
+
+	m_what = ss.str();
+}
+
+ShaderException::~ShaderException() {}
+
+const char* ShaderExpection::what() const noexcept
+{
+	return m_what.c_str();
 }
 
 string GetShaderTypeStr(ShaderType shaderType)
 {
-	switch(shaderType)
+	switch (shaderType)
 	{
 	case ShaderType::Vertex:
 		return "vertex";

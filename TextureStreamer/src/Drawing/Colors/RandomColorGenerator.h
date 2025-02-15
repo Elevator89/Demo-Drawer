@@ -2,7 +2,7 @@
 
 #include <random>
 #include <stdint.h>
-#include "Drawing/Colors/IColorGenerator.h"
+#include "../IColorGenerator.h"
 
 class RandomColorGenerator : public IColorGenerator
 {

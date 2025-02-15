@@ -1,8 +1,6 @@
 #include <cmath>
-#include "Drawing/Colors/ColorUtil.h"
+#include "../ColorUtil.h"
 #include "LowPassColorFilter.h"
-
-float Clamp01(float value);
 
 LowPassColorFilter::LowPassColorFilter(unsigned int order, float alpha) :
 	m_order(order),

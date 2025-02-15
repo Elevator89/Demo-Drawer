@@ -14,7 +14,7 @@ void ChanceBasedPointsTraverser::GetNextPoints(const Point& point, const ITopolo
 
 	m_traverserToDecorate->GetNextPoints(point, topology, visitedPoints, nextPointsToFilter);
 
-	std::discrete_distribution<bool> chanceDistribution{1.0f - m_chanceToReturn, m_chanceToReturn};
+	std::discrete_distribution<int> chanceDistribution{1.0f - m_chanceToReturn, m_chanceToReturn};
 
 	for(std::vector<Point>::const_iterator nextPointToFilter = nextPointsToFilter.cbegin(); nextPointToFilter != nextPointsToFilter.cend(); ++nextPointToFilter)
 	{

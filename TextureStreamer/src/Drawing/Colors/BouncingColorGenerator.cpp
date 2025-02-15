@@ -1,4 +1,4 @@
-#include "ColorUtil.h"
+#include "../ColorUtil.h"
 #include "BouncingColorGenerator.h"
 
 BouncingColorGenerator::BouncingColorGenerator(float deltaR, float deltaG, float deltaB) :

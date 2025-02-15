@@ -13,7 +13,7 @@ ChanceBasedPointPusher::~ChanceBasedPointPusher()
 
 void ChanceBasedPointPusher::PushPoint(std::list<Point>& points, const Point& pointToPush) const
 {
-	std::discrete_distribution<bool> chanceDistribution{1.0f - m_chanceToPush, m_chanceToPush};
+	std::discrete_distribution<int> chanceDistribution{1.0f - m_chanceToPush, m_chanceToPush};
 
 	if(chanceDistribution(*m_randomGenerator))
 		m_pusherToDecorate->PushPoint(points, pointToPush);

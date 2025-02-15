@@ -2,8 +2,8 @@
 
 #include <random>
 #include <stdint.h>
-#include "Drawing/Colors/IColorGenerator.h"
-#include "Drawing/Colors/IColorFilter.h"
+#include "../IColorGenerator.h"
+#include "../IColorFilter.h"
 
 class FilteredColorGenerator : public IColorGenerator
 {

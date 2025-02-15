@@ -14,10 +14,10 @@ void RandomPointPusher::PushPoint(std::list<Point>& points, const Point& pointTo
 		return;
 	}
 
-	std::uniform_int_distribution<unsigned int> pointsLengthDistribution(0, points.size()-1);
+	std::uniform_int_distribution<size_t> pointsLengthDistribution(0, points.size()-1);
 
 	std::list<Point>::const_iterator it = points.cbegin();
-	for(unsigned int i = 0; i < pointsLengthDistribution(*m_generator); ++i)
+	for(size_t i = 0; i < pointsLengthDistribution(*m_generator); ++i)
 		it++;
 
 	points.insert(it, pointToPush);

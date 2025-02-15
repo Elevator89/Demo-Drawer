@@ -18,8 +18,10 @@ std::string GetFileContents0( const std::string& filename )
 
 std::string GetFileContents( const std::string& filename )
 {
-	std::ifstream file;
-	file.open(filename);
+	std::ifstream file(filename, std::ifstream::in);
+
+	if (!file.is_open())
+		throw std::exception("File was not open");
 
 	std::stringstream contentStream;
 

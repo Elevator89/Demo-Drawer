@@ -16,4 +16,5 @@ private:
 	const ShaderType m_shaderType;
 	const GLuint m_shader;
 	const GLchar* m_infoLog;
+	std::string m_what;
 };

@@ -13,7 +13,7 @@ ChanceBasedPointPicker::~ChanceBasedPointPicker()
 
 std::list<Point>::const_iterator ChanceBasedPointPicker::PickPoint(const std::list<Point>& points) const
 {
-	std::discrete_distribution<bool> chanceDistribution{1.0f - m_chanceToPick, m_chanceToPick};
+	std::discrete_distribution<int> chanceDistribution{1.0f - m_chanceToPick, m_chanceToPick};
 
 	if(chanceDistribution(*m_randomGenerator))
 		return m_pickerToDecorate->PickPoint(points);

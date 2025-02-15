@@ -1,7 +1,7 @@
 #pragma once
 
 #include <stdint.h>
-#include "IColorGenerator.h"
+#include "../IColorGenerator.h"
 
 class SingleColorGenerator : public IColorGenerator
 {

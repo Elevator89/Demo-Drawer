@@ -57,7 +57,7 @@ void error_callback(int error, const char* description);
 // Window dimensions
 GLuint m_width = 1024;
 GLuint m_height = 768;
-float m_dotsPerStep = 100.0f;
+double m_dotsPerStep = 100.0;
 
 std::default_random_engine* m_randomGenerator;
 
@@ -202,7 +202,7 @@ int main(int argc, char * argv[])
 	double time = glfwGetTime();
 
 
-	float dotsToDraw = 0.0f;
+	double dotsToDraw = 0.0f;
 
 	// Game loop
 	while (!glfwWindowShouldClose(window))
@@ -212,7 +212,7 @@ int main(int argc, char * argv[])
 
 		dotsToDraw += m_dotsPerStep;
 
-		if(dotsToDraw >= 1.0f)
+		if(dotsToDraw >= 1.0)
 		{
 			unsigned int dotsToDrawThisFrame = (unsigned int)dotsToDraw;
 			dotsToDraw -= dotsToDrawThisFrame;
@@ -325,8 +325,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
 	m_dotsPerStep = m_dotsPerStep * pow(2.0, yoffset);
-	if(m_dotsPerStep < 1/60.0f)
-		m_dotsPerStep = 1/60.0f;
+	if(m_dotsPerStep < 1/60.0)
+		m_dotsPerStep = 1/60.0;
 	std::cout << "Dots per step = " << m_dotsPerStep << std::endl;
 }
 

@@ -2,7 +2,7 @@
 
 #include <random>
 #include <stdint.h>
-#include "Drawing/Colors/IColorFilter.h"
+#include "../IColorFilter.h"
 
 class LowPassColorFilter : public IColorFilter
 {

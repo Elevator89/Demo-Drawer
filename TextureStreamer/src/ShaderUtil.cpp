@@ -36,10 +36,10 @@ GLuint BuildShaderProgram(GLuint vertexShader, GLuint fragmentShader)
 	{
 		GLint maxLength = 0;
 		glGetProgramiv(program, GL_INFO_LOG_LENGTH, &maxLength);
-		vector<GLchar> infoLog(maxLength);
-		glGetProgramInfoLog(program, maxLength, &maxLength, &infoLog[0]);
+		GLchar* infoLog = new GLchar[maxLength];
+		glGetProgramInfoLog(program, maxLength, &maxLength, infoLog);
 		glDeleteProgram(program);
-		throw ShaderExpection(ShaderType::Program, program, &infoLog[0]);
+		throw ShaderException(ShaderType::Program, program, infoLog);
 	}
 	return program;
 }
@@ -78,8 +78,6 @@ GLuint GetShaderTypeGluint(ShaderType shaderType)
 		return GL_VERTEX_SHADER;
 	case ShaderType::Fragment:
 		return GL_FRAGMENT_SHADER;
-	case ShaderType::Program:
-		return GL_PROGRAM;
 	default:
 		return GL_FALSE;
 	}
