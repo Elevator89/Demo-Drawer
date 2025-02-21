@@ -40,7 +40,7 @@
 #include "Drawing/PointsTraverserDrawer.h"
 
 // Function prototypes
-char* getCmdOption(char** begin, char** end, const std::string & option);
+char* getCmdOption(char** begin, char** end, const std::string& option);
 bool cmdOptionExists(char** begin, char** end, const std::string& option);
 
 void switchPointsTraverser(PointsTraverserType traverserType);
@@ -78,20 +78,24 @@ PointsTraverserType m_pointsTraverserType = PointsTraverserType::Neighbour4;
 IColorGenerator* m_colorGenerator;
 
 // The MAIN function, from here we start the application and run the game loop
-int main(int argc, char * argv[])
+int main(int argc, char* argv[])
 {
-	// Init GLFW
-	glfwInit();
+	// Start OpenGL context and OS window using the GLFW helper library.
+	if (!glfwInit()) {
+		std::cerr << "ERROR: could not start GLFW3" << std::endl;
+		return 1;
+	}
 
 	// Set all the required options for GLFW
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4);
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
 	GLFWwindow* window = nullptr;
 
-	if(cmdOptionExists(argv, argv+argc, "-f"))
+	if (cmdOptionExists(argv, argv + argc, "-f"))
 	{
 		GLFWmonitor* primaryMonitor = glfwGetPrimaryMonitor();
 		const GLFWvidmode* mode = glfwGetVideoMode(primaryMonitor);
@@ -106,16 +110,43 @@ int main(int argc, char * argv[])
 		window = glfwCreateWindow(m_width, m_height, "Texture streaming demo", nullptr, nullptr);
 	}
 
+	if (!window) {
+		std::cerr << "ERROR: Could not open window with GLFW3" << std::endl;
+		glfwTerminate();
+		return 1;
+	}
+
 	glfwMakeContextCurrent(window);
 
 	// Set the required callback functions
 	glfwSetKeyCallback(window, key_callback);
 	glfwSetScrollCallback(window, scroll_callback);
 
+	// Start Glad, so we can call OpenGL functions.
+	int version_glad = gladLoadGL(glfwGetProcAddress);
+	if (version_glad == 0) {
+		std::cerr << "ERROR: Failed to initialize OpenGL context" << std::endl;
+		glfwTerminate();
+		return 1;
+	}
+	std::cout << "Loaded OpenGL " << GLAD_VERSION_MAJOR(version_glad) << "." << GLAD_VERSION_MINOR(version_glad) << std::endl;
+
+	// Try to call some OpenGL functions, and print some more version info.
+	std::cout << "Renderer: " << glGetString(GL_RENDERER) << std::endl;
+	std::cout << "OpenGL version supported " << glGetString(GL_VERSION) << std::endl;
+
 	// Define the viewport dimensions
 	glViewport(0, 0, m_width, m_height);
 
-	GLuint shaderProgram = LoadAndBuildShaderProgram("shaders/tex.vert", "shaders/tex.frag");
+	GLuint shaderProgram;
+	try {
+		shaderProgram = LoadAndBuildShaderProgram("shaders/tex.vert", "shaders/tex.frag");
+	}
+	catch (const std::exception& ex) {
+		std::cerr << ex.what() << std::endl;
+		glfwTerminate();
+		return 1;
+	}
 
 	// Set up vertex data (and buffer(s)) and attribute pointers
 	GLfloat vertices[] =
@@ -207,12 +238,12 @@ int main(int argc, char * argv[])
 
 		dotsToDraw += m_dotsPerStep;
 
-		if(dotsToDraw >= 1.0)
+		if (dotsToDraw >= 1.0)
 		{
 			unsigned int dotsToDrawThisFrame = (unsigned int)dotsToDraw;
 			dotsToDraw -= dotsToDrawThisFrame;
 
-			for(unsigned int i= 0; i < dotsToDrawThisFrame; ++i)
+			for (unsigned int i = 0; i < dotsToDrawThisFrame; ++i)
 				m_drawer->Draw(field);
 		}
 
@@ -242,7 +273,7 @@ int main(int argc, char * argv[])
 		time = newTime;
 
 		std::cout << std::fixed << std::setprecision(2)
-				  << "FPS = " << 1.0 / delta << '\r';
+			<< "FPS = " << 1.0 / delta << '\r';
 	}
 	// Properly de-allocate all resources once they've outlived their purpose
 	glDeleteVertexArrays(1, &VAO);
@@ -261,7 +292,7 @@ int main(int argc, char * argv[])
 	exit(EXIT_SUCCESS);
 }
 
-char* getCmdOption(char** begin, char** end, const std::string & option)
+char* getCmdOption(char** begin, char** end, const std::string& option)
 {
 	char** itr = std::find(begin, end, option);
 	if (itr != end && ++itr != end)
@@ -282,37 +313,37 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, GL_TRUE);
 
-	if(action == GLFW_PRESS)
+	if (action == GLFW_PRESS)
 	{
-		if(key == GLFW_KEY_1)
+		if (key == GLFW_KEY_1)
 			switchPicker(PickerType::Random);
-		if(key == GLFW_KEY_2)
+		if (key == GLFW_KEY_2)
 			switchPicker(PickerType::FromStart);
-		if(key == GLFW_KEY_3)
+		if (key == GLFW_KEY_3)
 			switchPicker(PickerType::FromEnd);
-		if(key == GLFW_KEY_4)
+		if (key == GLFW_KEY_4)
 			switchPicker(PickerType::RandomWithChance);
-		if(key == GLFW_KEY_5)
+		if (key == GLFW_KEY_5)
 			switchPicker(PickerType::FromStartWithChance);
-		if(key == GLFW_KEY_6)
+		if (key == GLFW_KEY_6)
 			switchPicker(PickerType::FromEndWithChance);
 
-		if(key == GLFW_KEY_KP_1)
+		if (key == GLFW_KEY_KP_1)
 			switchPusher(PickerType::Random);
-		if(key == GLFW_KEY_KP_2)
+		if (key == GLFW_KEY_KP_2)
 			switchPusher(PickerType::FromStart);
-		if(key == GLFW_KEY_KP_3)
+		if (key == GLFW_KEY_KP_3)
 			switchPusher(PickerType::FromEnd);
-		if(key == GLFW_KEY_KP_4)
+		if (key == GLFW_KEY_KP_4)
 			switchPusher(PickerType::RandomWithChance);
-		if(key == GLFW_KEY_KP_5)
+		if (key == GLFW_KEY_KP_5)
 			switchPusher(PickerType::FromStartWithChance);
-		if(key == GLFW_KEY_KP_6)
+		if (key == GLFW_KEY_KP_6)
 			switchPusher(PickerType::FromEndWithChance);
 
-		if(key == GLFW_KEY_Q)
+		if (key == GLFW_KEY_Q)
 			switchPointsTraverser(PointsTraverserType::Neighbour4);
-		if(key == GLFW_KEY_W)
+		if (key == GLFW_KEY_W)
 			switchPointsTraverser(PointsTraverserType::Neighbour4WithChance);
 	}
 }
@@ -320,8 +351,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
 	m_dotsPerStep = m_dotsPerStep * pow(2.0, yoffset);
-	if(m_dotsPerStep < 1/60.0)
-		m_dotsPerStep = 1/60.0;
+	if (m_dotsPerStep < 1 / 60.0)
+		m_dotsPerStep = 1 / 60.0;
 	std::cout << "Dots per step = " << m_dotsPerStep << std::endl;
 }
 
@@ -332,7 +363,7 @@ void error_callback(int error, const char* description)
 
 void switchPointsTraverser(PointsTraverserType traverserType)
 {
-	if(m_pointsTraverserType == traverserType) return;
+	if (m_pointsTraverserType == traverserType) return;
 	m_pointsTraverserType = traverserType;
 
 	delete m_pointsTraverser;
@@ -344,7 +375,7 @@ IPointsTraverser* createPointsTraverser(PointsTraverserType traverserType)
 {
 	IPointsTraverser* neighbour4PointsTraverser = new Neighbour4PointsTraverser();
 
-	switch(traverserType)
+	switch (traverserType)
 	{
 	case PointsTraverserType::Neighbour4WithChance:
 		return new ChanceBasedPointsTraverser(neighbour4PointsTraverser, m_randomGenerator, 0.59f);
@@ -356,7 +387,7 @@ IPointsTraverser* createPointsTraverser(PointsTraverserType traverserType)
 
 void switchPusher(PickerType pickerType)
 {
-	if(m_currentPusherType == pickerType) return;
+	if (m_currentPusherType == pickerType) return;
 	m_currentPusherType = pickerType;
 
 	delete m_pointPusher;
@@ -366,7 +397,7 @@ void switchPusher(PickerType pickerType)
 
 void switchPicker(PickerType pickerType)
 {
-	if(m_currentPickerType == pickerType) return;
+	if (m_currentPickerType == pickerType) return;
 	m_currentPickerType = pickerType;
 
 	delete m_pointPicker;
@@ -376,7 +407,7 @@ void switchPicker(PickerType pickerType)
 
 IPointPicker* createPicker(PickerType pickerType)
 {
-	switch(pickerType)
+	switch (pickerType)
 	{
 	case PickerType::FromStart:
 		return new PointFromStartPicker();
@@ -397,7 +428,7 @@ IPointPicker* createPicker(PickerType pickerType)
 
 IPointPusher* createPusher(PickerType pickerType)
 {
-	switch(pickerType)
+	switch (pickerType)
 	{
 	case PickerType::FromStart:
 		return new PointToStartPusher();
