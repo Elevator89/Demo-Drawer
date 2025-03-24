@@ -48,10 +48,14 @@ void ChanceBasedDrawer::Draw(Field<uint32_t>& field)
 		for (std::vector<Point>::const_iterator nextPointIt = nextPoints.cbegin(); nextPointIt != nextPoints.cend(); ++nextPointIt)
 		{
 			Point nextPoint = *nextPointIt;
-			m_visitedPoints.insert(nextPoint);
-			m_container->Push(nextPoint);
 
-			field.SetCell(nextPoint, (uint32_t)Color::White);
+			std::discrete_distribution<int> chanceDistribution{ 1.0f - m_chanceToPush, m_chanceToPush };
+			if (chanceDistribution(*m_randomGenerator)) {
+				m_visitedPoints.insert(nextPoint);
+				m_container->Push(nextPoint);
+
+				field.SetCell(nextPoint, (uint32_t)Color::White);
+			}
 		}
 	}
 	else

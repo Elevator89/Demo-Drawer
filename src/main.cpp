@@ -32,6 +32,7 @@
 #include "Topologies/ThorusTopology.h"
 
 // Function prototypes
+double clamp(double d, double min, double max);
 char* getCmdOption(char** begin, char** end, const std::string& option);
 bool cmdOptionExists(char** begin, char** end, const std::string& option);
 
@@ -214,6 +215,26 @@ int main(int argc, char* argv[])
 		// Check if any events have been activiated (key pressed, mouse moved etc.) and call corresponding response functions
 		glfwPollEvents();
 
+		if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
+		{
+			double mouseX, mouseY;
+			glfwGetCursorPos(window, &mouseX, &mouseY);
+
+			mouseX /= m_width;
+			mouseY /= m_height;
+
+			clamp(mouseX, 0.00001, 0.9999);
+			clamp(mouseY, 0.00001, 0.9999);
+
+			m_drawer->SetChanceToPick(mouseX);
+			m_drawer->SetChanceToPush(mouseY);
+
+			std::cout << std::fixed << std::setprecision(2)
+				<< " X=" << mouseX
+				<< " Y=" << mouseY
+				<< '\r\n';
+		}
+
 		dotsToDraw += m_dotsPerStep;
 
 		if (dotsToDraw >= 1.0)
@@ -268,6 +289,12 @@ int main(int argc, char* argv[])
 	delete m_topology;
 
 	exit(EXIT_SUCCESS);
+}
+
+double clamp(double d, double min, double max)
+{
+	const double t = d < min ? min : d;
+	return t > max ? max : t;
 }
 
 char* getCmdOption(char** begin, char** end, const std::string& option)
