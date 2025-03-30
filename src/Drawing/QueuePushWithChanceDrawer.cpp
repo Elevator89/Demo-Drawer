@@ -1,6 +1,6 @@
-#include "Drawing/Colors/Color.h"
-#include "Drawing/Colors/ColorUtil.h"
-#include "Drawing/Drawers/QueuePushWithChanceDrawer.h"
+#include "../Color.h"
+#include "../ColorUtil.h"
+#include "QueuePushWithChanceDrawer.h"
 
 QueuePushWithChanceDrawer::QueuePushWithChanceDrawer(const ITopology* topology, IColorGenerator* colorGenerator, float chanceToPushItem, float fieldFillBeforeFlush) :
 	m_topology(topology),
