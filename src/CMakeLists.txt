@@ -46,6 +46,7 @@ target_sources( DemoDrawer PUBLIC
     "IColorFilter.h"
     "IColorGenerator.h"
     "IContainer.h"
+    "ContainerType.h"
     "QueueContainer.h"
     "QueueContainer.cpp"
     "StackContainer.h"

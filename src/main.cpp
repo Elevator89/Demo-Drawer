@@ -24,6 +24,7 @@
 #include "ITopology.h"
 #include "PointsTraverserType.h"
 #include "IContainer.h"
+#include "ContainerType.h"
 #include "StackContainer.h"
 #include "QueueContainer.h"
 #include "Rendering/ShaderUtil.h"
@@ -39,6 +40,9 @@ bool cmdOptionExists(char** begin, char** end, const std::string& option);
 void switchPointsTraverser(PointsTraverserType traverserType);
 IPointsTraverser* createPointsTraverser(PointsTraverserType traverserType);
 
+void switchContainer(ContainerType containerType);
+IContainer* createContainer(ContainerType containerType);
+
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void error_callback(int error, const char* description);
@@ -53,6 +57,8 @@ std::default_random_engine* m_randomGenerator;
 ITopology* m_topology;
 IColorFilter* m_colorFilter;
 ChanceBasedDrawer* m_drawer;
+
+ContainerType m_containerType = ContainerType::Stack;
 
 IPointsTraverser* m_pointsTraverser;
 PointsTraverserType m_pointsTraverserType = PointsTraverserType::Neighbour4;
@@ -320,6 +326,10 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
 	if (action == GLFW_PRESS)
 	{
+		if (key == GLFW_KEY_1)
+			switchContainer(ContainerType::Stack);
+		if (key == GLFW_KEY_2)
+			switchContainer(ContainerType::Queue);
 		if (key == GLFW_KEY_Q)
 			switchPointsTraverser(PointsTraverserType::Neighbour4);
 		if (key == GLFW_KEY_W)
@@ -363,3 +373,31 @@ IPointsTraverser* createPointsTraverser(PointsTraverserType traverserType)
 		return neighbour4PointsTraverser;
 	}
 }
+
+void switchContainer(ContainerType containerType)
+{
+	if (m_containerType == containerType) return;
+	m_containerType = containerType;
+
+	IContainer* oldContainer = m_drawer->GetContainer();
+	IContainer* newContainer = createContainer(m_containerType);
+
+	while (!oldContainer->IsEmpty())
+		newContainer->Push(oldContainer->Pick());
+
+	delete oldContainer;
+	m_drawer->SetContainer(newContainer);
+}
+
+IContainer* createContainer(ContainerType containerType)
+{
+	switch (containerType)
+	{
+	case ContainerType::Stack:
+		return new StackContainer();
+	case ContainerType::Queue:
+	default:
+		return new QueueContainer();
+	}
+}
+
