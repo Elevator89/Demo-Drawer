@@ -36,8 +36,8 @@ void ChanceBasedDrawer::Draw(Field<uint32_t>& field)
 
 	const Point pointToVisit = m_container->Pick();
 
-	std::discrete_distribution<int> chanceDistribution{ 1.0f - m_chanceToPick, m_chanceToPick };
-	if (chanceDistribution(*m_randomGenerator))
+	std::uniform_real_distribution<float> chanceDistribution{ 0.0f, 1.0f};
+	if (chanceDistribution(*m_randomGenerator) < m_chanceToPick)
 	{
 		field.SetCell(pointToVisit, m_colorGenerator->GenerateColor());
 
@@ -49,8 +49,7 @@ void ChanceBasedDrawer::Draw(Field<uint32_t>& field)
 		{
 			Point nextPoint = *nextPointIt;
 
-			std::discrete_distribution<int> chanceDistribution{ 1.0f - m_chanceToPush, m_chanceToPush };
-			if (chanceDistribution(*m_randomGenerator)) {
+			if (chanceDistribution(*m_randomGenerator) < m_chanceToPush) {
 				m_visitedPoints.insert(nextPoint);
 				m_container->Push(nextPoint);
 
