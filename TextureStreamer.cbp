@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="TextureStreamer" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/TextureStreamer" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/TextureStreamer" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-std=c++11" />
+			<Add option="-fexceptions" />
+			<Add option="-DGLEW_STATIC" />
+			<Add directory="C:/Program Files (x86)/GLFW/include" />
+			<Add directory="C:/Program Files (x86)/glew/include" />
+			<Add directory="src/" />
+		</Compiler>
+		<Linker>
+			<Add library="libglew32" />
+			<Add library="glfw3" />
+			<Add library="winmm" />
+			<Add library="gdi32" />
+			<Add library="glu32" />
+			<Add library="opengl32" />
+			<Add directory="C:/Program Files (x86)/GLFW/lib" />
+			<Add directory="C:/Program Files (x86)/glew/lib" />
+		</Linker>
+		<Unit filename="shaders/simple.frag">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="shaders/simple.vert">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="shaders/tex.frag">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="shaders/tex.vert">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="src/Drawing/Colors/BouncingColorGenerator.cpp" />
+		<Unit filename="src/Drawing/Colors/BouncingColorGenerator.h" />
+		<Unit filename="src/Drawing/Colors/Color.h" />
+		<Unit filename="src/Drawing/Colors/ColorUtil.cpp" />
+		<Unit filename="src/Drawing/Colors/ColorUtil.h" />
+		<Unit filename="src/Drawing/Colors/FilteredColorGenerator.cpp" />
+		<Unit filename="src/Drawing/Colors/FilteredColorGenerator.h" />
+		<Unit filename="src/Drawing/Colors/IColorFilter.h" />
+		<Unit filename="src/Drawing/Colors/IColorGenerator.h" />
+		<Unit filename="src/Drawing/Colors/LowPassColorFilter.cpp" />
+		<Unit filename="src/Drawing/Colors/LowPassColorFilter.h" />
+		<Unit filename="src/Drawing/Colors/RandomColorGenerator.cpp" />
+		<Unit filename="src/Drawing/Colors/RandomColorGenerator.h" />
+		<Unit filename="src/Drawing/Colors/SingleColorGenerator.cpp" />
+		<Unit filename="src/Drawing/Colors/SingleColorGenerator.h" />
+		<Unit filename="src/Drawing/Drawers/ChanceBasedPointPicker.cpp" />
+		<Unit filename="src/Drawing/Drawers/ChanceBasedPointPicker.h" />
+		<Unit filename="src/Drawing/Drawers/ChanceBasedPointPusher.cpp" />
+		<Unit filename="src/Drawing/Drawers/ChanceBasedPointPusher.h" />
+		<Unit filename="src/Drawing/Drawers/ChanceBasedPointsTraverser.cpp" />
+		<Unit filename="src/Drawing/Drawers/ChanceBasedPointsTraverser.h" />
+		<Unit filename="src/Drawing/Drawers/IDrawer.h" />
+		<Unit filename="src/Drawing/Drawers/IPointPicker.h" />
+		<Unit filename="src/Drawing/Drawers/IPointPusher.h" />
+		<Unit filename="src/Drawing/Drawers/IPointsTraverser.h" />
+		<Unit filename="src/Drawing/Drawers/Neighbour4PointsTraverser.cpp" />
+		<Unit filename="src/Drawing/Drawers/Neighbour4PointsTraverser.h" />
+		<Unit filename="src/Drawing/Drawers/PickerType.h" />
+		<Unit filename="src/Drawing/Drawers/PointFromEndPicker.cpp" />
+		<Unit filename="src/Drawing/Drawers/PointFromEndPicker.h" />
+		<Unit filename="src/Drawing/Drawers/PointFromStartPicker.cpp" />
+		<Unit filename="src/Drawing/Drawers/PointFromStartPicker.h" />
+		<Unit filename="src/Drawing/Drawers/PointToEndPusher.cpp" />
+		<Unit filename="src/Drawing/Drawers/PointToEndPusher.h" />
+		<Unit filename="src/Drawing/Drawers/PointToStartPusher.cpp" />
+		<Unit filename="src/Drawing/Drawers/PointToStartPusher.h" />
+		<Unit filename="src/Drawing/Drawers/PointsTraverserDrawer.cpp" />
+		<Unit filename="src/Drawing/Drawers/PointsTraverserDrawer.h" />
+		<Unit filename="src/Drawing/Drawers/PointsTraverserType.h" />
+		<Unit filename="src/Drawing/Drawers/QueuePopWithChanceDrawer.cpp" />
+		<Unit filename="src/Drawing/Drawers/QueuePopWithChanceDrawer.h" />
+		<Unit filename="src/Drawing/Drawers/QueuePushWithChanceDrawer.cpp" />
+		<Unit filename="src/Drawing/Drawers/QueuePushWithChanceDrawer.h" />
+		<Unit filename="src/Drawing/Drawers/RandomDrawer.cpp" />
+		<Unit filename="src/Drawing/Drawers/RandomDrawer.h" />
+		<Unit filename="src/Drawing/Drawers/RandomPointPicker.cpp" />
+		<Unit filename="src/Drawing/Drawers/RandomPointPicker.h" />
+		<Unit filename="src/Drawing/Drawers/RandomPointPusher.cpp" />
+		<Unit filename="src/Drawing/Drawers/RandomPointPusher.h" />
+		<Unit filename="src/Drawing/Drawers/StackPopWithChanceDrawer.cpp" />
+		<Unit filename="src/Drawing/Drawers/StackPopWithChanceDrawer.h" />
+		<Unit filename="src/Drawing/Field.h" />
+		<Unit filename="src/Drawing/Point.cpp" />
+		<Unit filename="src/Drawing/Point.h" />
+		<Unit filename="src/Drawing/Topologies/CroppedTopology.cpp" />
+		<Unit filename="src/Drawing/Topologies/CroppedTopology.h" />
+		<Unit filename="src/Drawing/Topologies/ITopology.h" />
+		<Unit filename="src/Drawing/Topologies/ThorusTopology.cpp" />
+		<Unit filename="src/Drawing/Topologies/ThorusTopology.h" />
+		<Unit filename="src/Exceptions/Exception.cpp" />
+		<Unit filename="src/Exceptions/Exception.h" />
+		<Unit filename="src/Exceptions/OutOfRangeException.h" />
+		<Unit filename="src/Exceptions/ShaderException.cpp" />
+		<Unit filename="src/Exceptions/ShaderException.h" />
+		<Unit filename="src/FileUtil.cpp" />
+		<Unit filename="src/FileUtil.h" />
+		<Unit filename="src/ShaderType.h" />
+		<Unit filename="src/ShaderUtil.cpp" />
+		<Unit filename="src/ShaderUtil.h" />
+		<Unit filename="src/TexUtil.cpp" />
+		<Unit filename="src/TexUtil.h" />
+		<Unit filename="src/main.cpp" />
+		<Extensions>
+			<editor_config active="1" use_tabs="1" tab_indents="1" tab_width="4" indent="4" eol_mode="0" />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
