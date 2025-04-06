@@ -17,6 +17,7 @@
 #include "Drawing/PointTraversal/ChanceBasedPointsTraverser.h"
 #include "Drawing/PointTraversal/Neighbour4PointsTraverser.h"
 #include "ITopology.h"
+#include "Filters.h"
 #include "PointsTraverserType.h"
 #include "IContainer.h"
 #include "ContainerType.h"
@@ -218,6 +219,8 @@ int main(int argc, char* argv[])
 				<< " Y=" << mouseY
 				<< '\r\n';
 		}
+
+		Darken(backgroundField, 0.99f);
 
 		dotsToDraw += m_dotsPerStep;
 

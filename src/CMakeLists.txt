@@ -46,4 +46,6 @@ target_sources( DemoDrawer PUBLIC
     "OutOfRangeException.h"
     "Point.h"
     "Point.cpp"
+    "Filters.h"
+    "Filters.cpp"
 )
