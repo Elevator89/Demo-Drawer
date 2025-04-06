@@ -16,7 +16,7 @@ public:
 	ChanceBasedDrawer(const ITopology* topology, IContainer* container, const IPointsTraverser* pointsTraverser, float chanceToPick, float chanceToPush, IColorGenerator* colorGenerator, float fieldFillBeforeFlush, std::default_random_engine* randomGenerator);
 	virtual ~ChanceBasedDrawer();
 
-	void Draw(Field<uint32_t>& field) override;
+	void Draw(Field<uint32_t>& colorField, Field<uint32_t>& containerField) override;
 
 	inline const ITopology* GetTopology() const { return m_topology; }
 	inline void SetTopology(const ITopology* topology) { m_topology = topology; }

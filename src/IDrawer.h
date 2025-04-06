@@ -8,5 +8,5 @@ class IDrawer
 public:
 	virtual ~IDrawer() {}
 
-	virtual void Draw(Field<uint32_t>& field) = 0;
+	virtual void Draw(Field<uint32_t>& colorField, Field<uint32_t>& containerField) = 0;
 };

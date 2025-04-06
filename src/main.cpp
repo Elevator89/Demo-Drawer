@@ -167,22 +167,6 @@ int main(int argc, char* argv[])
 
 	glBindVertexArray(0); // Unbind VAO
 
-
-	// Load and create a texture
-	GLuint texture1;
-
-	glGenTextures(1, &texture1);
-	glBindTexture(GL_TEXTURE_2D, texture1); // All upcoming GL_TEXTURE_2D operations now have effect on our texture object
-	// Set our texture parameters
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// Set texture wrapping to GL_REPEAT
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	// Set texture filtering
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-	Field<uint32_t> field(m_width, m_height, 0x00000000);
-
-
 	m_topology = new ThorusTopology(m_width, m_height);
 
 	m_colorFilter = new LowPassColorFilter(6, 0.2f);
@@ -199,15 +183,14 @@ int main(int argc, char* argv[])
 	//m_drawer = new QueuePushWithChanceDrawer(m_topology, m_colorGenerator, 0.5f, 0.95f);
 	m_drawer = new ChanceBasedDrawer(m_topology, new StackContainer(), m_pointsTraverser, 0.7, 0.7, m_colorGenerator, 0.95f, m_randomGenerator);
 
-	// Load, create texture and generate mipmaps
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, field.GetWidth(), field.GetHeight(), 0, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8, field.GetData());
-	glGenerateMipmap(GL_TEXTURE_2D);
+	Field<uint32_t> backgroundField(m_width, m_height, 0x00000000);
+	Field<uint32_t> foregroundField(m_width, m_height, 0x00000000);
 
-	glBindTexture(GL_TEXTURE_2D, 0); // Unbind texture when done, so we won't accidentily mess up our texture.
+	// Load and create a texture
+	GLuint backgroundTexture = CreateTexture(backgroundField);
+	GLuint foregroundTexture = CreateTexture(foregroundField);
 
 	double time = glfwGetTime();
-
-
 	double dotsToDraw = 0.0f;
 
 	// Game loop
@@ -244,19 +227,25 @@ int main(int argc, char* argv[])
 			dotsToDraw -= dotsToDrawThisFrame;
 
 			for (unsigned int i = 0; i < dotsToDrawThisFrame; ++i)
-				m_drawer->Draw(field);
+				m_drawer->Draw(backgroundField, foregroundField);
 		}
 
 		// Render
+		ModifyTexture(backgroundTexture, backgroundField);
+		ModifyTexture(foregroundTexture, foregroundField);
 
 		// Activate shader
 		glUseProgram(shaderProgram);
 
 		// Bind Textures using texture units
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, texture1);
+		glBindTexture(GL_TEXTURE_2D, backgroundTexture);
+		glUniform1i(glGetUniformLocation(shaderProgram, "backgroundTexture"), 0);
 
-		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, field.GetWidth(), field.GetHeight(), GL_RGBA, GL_UNSIGNED_INT_8_8_8_8, field.GetData());
+		// Bind Textures using texture units
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, foregroundTexture);
+		glUniform1i(glGetUniformLocation(shaderProgram, "foregroundTexture"), 1);
 
 		// Draw container
 		glBindVertexArray(VAO);
