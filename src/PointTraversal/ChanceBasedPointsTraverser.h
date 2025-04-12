@@ -3,8 +3,8 @@
 #include <unordered_set>
 #include <vector>
 #include <random>
-#include "../../Point.h"
-#include "../../ITopology.h"
+#include "../Point.h"
+#include "../ITopology.h"
 #include "../IPointsTraverser.h"
 
 class ChanceBasedPointsTraverser : public IPointsTraverser

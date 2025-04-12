@@ -1,5 +1,5 @@
 #include "ChanceBasedDrawer.h"
-#include "../Color.h"
+#include "Color.h"
 
 ChanceBasedDrawer::ChanceBasedDrawer(const ITopology* topology, IContainer* container, const IPointsTraverser* pointsTraverser, float chanceToPick, float chanceToPush, IColorGenerator* colorGenerator, float fieldFillBeforeFlush, std::default_random_engine* randomGenerator) :
 	m_topology(topology),

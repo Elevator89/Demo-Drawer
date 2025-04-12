@@ -2,8 +2,8 @@
 
 #include <unordered_set>
 #include <vector>
-#include "../../Point.h"
-#include "../../ITopology.h"
+#include "../Point.h"
+#include "../ITopology.h"
 #include "../IPointsTraverser.h"
 
 class Neighbour4PointsTraverser : public IPointsTraverser

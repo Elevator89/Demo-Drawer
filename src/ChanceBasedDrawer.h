@@ -3,20 +3,20 @@
 #include <unordered_set>
 #include <list>
 #include <random>
-#include "../IContainer.h"
-#include "../Point.h"
-#include "../ITopology.h"
-#include "../IColorGenerator.h"
-#include "../IDrawer.h"
+#include "IContainer.h"
+#include "Point.h"
+#include "Field.h"
+#include "ITopology.h"
+#include "IColorGenerator.h"
 #include "IPointsTraverser.h"
 
-class ChanceBasedDrawer : public IDrawer
+class ChanceBasedDrawer
 {
 public:
 	ChanceBasedDrawer(const ITopology* topology, IContainer* container, const IPointsTraverser* pointsTraverser, float chanceToPick, float chanceToPush, IColorGenerator* colorGenerator, float fieldFillBeforeFlush, std::default_random_engine* randomGenerator);
 	virtual ~ChanceBasedDrawer();
 
-	void Draw(Field<uint32_t>& colorField, Field<uint32_t>& containerField) override;
+	void Draw(Field<uint32_t>& colorField, Field<uint32_t>& containerField);
 
 	inline const ITopology* GetTopology() const { return m_topology; }
 	inline void SetTopology(const ITopology* topology) { m_topology = topology; }
