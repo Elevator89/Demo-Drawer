@@ -3,24 +3,21 @@
 #include <stdint.h>
 #include "../IColorGenerator.h"
 
-class SingleColorGenerator : public IColorGenerator
+template <typename TColor>
+class SingleColorGenerator : public IColorGenerator<TColor>
 {
 public:
-	SingleColorGenerator(uint32_t color);
-	virtual ~SingleColorGenerator();
+	SingleColorGenerator(TColor color) : m_color(color) {}
+	virtual ~SingleColorGenerator() {}
 
-	uint32_t GenerateColor() override;
-
-	inline uint32_t GetColor()
+	TColor GenerateColor() override
 	{
-		return m_color;
+		return GetColor();
 	}
 
-	inline void SetColor(uint32_t color)
-	{
-		m_color = color;
-	}
+	inline TColor GetColor() { return m_color; }
+	inline void SetColor(TColor color) { m_color = color; }
 
 private:
-	uint32_t m_color;
+	TColor m_color;
 };

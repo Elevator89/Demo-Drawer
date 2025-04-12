@@ -1,19 +1,26 @@
 #pragma once
 
 #include <random>
-#include <stdint.h>
 #include "../IColorGenerator.h"
 #include "../IColorFilter.h"
 
-class FilteredColorGenerator : public IColorGenerator
+template <typename TColor>
+class FilteredColorGenerator : public IColorGenerator<TColor>
 {
 public:
-	FilteredColorGenerator(IColorGenerator* colorGenerator, IColorFilter* colorFilter);
-	virtual ~FilteredColorGenerator();
+	FilteredColorGenerator(IColorGenerator<TColor>* colorGenerator, IColorFilter<TColor>* colorFilter) :
+		m_fillingColorGenerator(colorGenerator),
+		m_colorFilter(colorFilter)
+	{}
 
-	uint32_t GenerateColor() override;
+	virtual ~FilteredColorGenerator() {}
+
+	TColor GenerateColor() override
+	{
+		return m_colorFilter->Filter(m_fillingColorGenerator->GenerateColor());
+	}
 
 private:
-	IColorGenerator* m_colorGenerator;
-	IColorFilter* m_colorFilter;
+	IColorGenerator<TColor>* m_fillingColorGenerator;
+	IColorFilter<TColor>* m_colorFilter;
 };

@@ -1,12 +1,11 @@
 #pragma once
 
-#include<stdint.h>
-
+template <typename TColor>
 class IColorFilter
 {
 public:
 	virtual ~IColorFilter() {}
 
-	virtual uint32_t Filter(uint32_t value) = 0;
+	virtual TColor Filter(const TColor& value) = 0;
 };
 

@@ -6,11 +6,10 @@
 #include <iomanip>
 #include <iostream>
 
-#include "Color.h"
-#include "ColorGeneration/BouncingColorGenerator.h"
+#include "Color4b.h"
+#include "ColorGeneration/BouncingColor4bFilter.h" 
+#include "ColorGeneration/RecurrentFilteringColorGenerator.h"
 #include "ColorGeneration/FilteredColorGenerator.h"
-#include "ColorGeneration/LowPassColorFilter.h"
-#include "ColorGeneration/RandomColorGenerator.h"
 #include "ColorGeneration/SingleColorGenerator.h"
 #include "PointTraversal/ChanceBasedPointsTraverser.h"
 #include "PointTraversal/Neighbour4PointsTraverser.h"
@@ -50,15 +49,16 @@ double m_dotsPerStep = 100.0;
 std::default_random_engine* m_randomGenerator;
 
 ITopology* m_topology;
-IColorFilter* m_colorFilter;
-ChanceBasedDrawer* m_drawer;
+IColorFilter<Color4b>* m_colorFilter;
+ChanceBasedDrawer<Color4b>* m_drawer;
 
 ContainerType m_containerType = ContainerType::Stack;
 
 IPointsTraverser* m_pointsTraverser;
 PointsTraverserType m_pointsTraverserType = PointsTraverserType::Neighbour4;
 
-IColorGenerator* m_colorGenerator;
+IColorGenerator<Color4b>* m_fillingColorGenerator;
+IColorGenerator<Color4b>* m_containerColorGenerator;
 
 // The MAIN function, from here we start the application and run the game loop
 int main(int argc, char* argv[])
@@ -169,22 +169,25 @@ int main(int argc, char* argv[])
 
 	m_topology = new ThorusTopology(m_width, m_height);
 
-	m_colorFilter = new LowPassColorFilter(6, 0.2f);
-
+	//m_colorFilter = new LowPassColor4fFilter(6, 0.2f);
 	//IColorGenerator* colorGenerator = new SingleColorGenerator((uint32_t)Color::White);
 	//IColorGenerator* baseColorGenerator = new RandomColorGenerator();
 	//IColorGenerator* colorGenerator = new FilteredColorGenerator(baseColorGenerator, colorFilter);
-	m_colorGenerator = new BouncingColorGenerator(0.000001f, 0.000003f, 0.000011f);
+
+	//m_colorFilter = new BouncingColor4fFilter(Color4f(0.000001f, 0.000003f, 0.000011f, 0.0f));
+	m_colorFilter = new BouncingColor4bFilter(1000000 / 255, 1000000 / 3 / 255, 1000000 / 11 / 255, 0);
+	m_fillingColorGenerator = new RecurrentFilteringColorGenerator<Color4b>(Color4b::Grey(), m_colorFilter);
+	m_containerColorGenerator = new SingleColorGenerator<Color4b>(Color4b::White());
 
 	m_randomGenerator = new std::default_random_engine();
 
 	m_pointsTraverser = createPointsTraverser(m_pointsTraverserType);
 
 	//m_drawer = new QueuePushWithChanceDrawer(m_topology, m_colorGenerator, 0.5f, 0.95f);
-	m_drawer = new ChanceBasedDrawer(m_topology, new StackContainer(), m_pointsTraverser, 0.7, 0.7, m_colorGenerator, 0.95f, m_randomGenerator);
+	m_drawer = new ChanceBasedDrawer<Color4b>(m_topology, new StackContainer(), m_pointsTraverser, 0.7, 0.7, m_fillingColorGenerator, m_containerColorGenerator, 0.95f, m_randomGenerator);
 
-	Field<uint32_t> backgroundField(m_width, m_height, 0x00000000);
-	Field<uint32_t> foregroundField(m_width, m_height, 0x00000000);
+	Field<Color4b> backgroundField(m_width, m_height, Color4b::Black());
+	Field<Color4b> foregroundField(m_width, m_height, Color4b::Black());
 
 	// Load and create a texture
 	GLuint backgroundTexture = CreateTexture(backgroundField);
@@ -274,7 +277,8 @@ int main(int argc, char* argv[])
 	glfwTerminate();
 
 	delete m_drawer;
-	delete m_colorGenerator;
+	delete m_containerColorGenerator;
+	delete m_fillingColorGenerator;
 	delete m_colorFilter;
 	delete m_topology;
 

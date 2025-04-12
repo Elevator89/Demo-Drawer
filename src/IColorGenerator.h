@@ -1,11 +1,12 @@
 #pragma once
 
-#include<stdint.h>
+#include "Color4f.h"
 
+template <typename TColor>
 class IColorGenerator
 {
 public:
 	virtual ~IColorGenerator() {}
 
-	virtual uint32_t GenerateColor() = 0;
+	virtual TColor GenerateColor() = 0;
 };

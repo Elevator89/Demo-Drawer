@@ -61,7 +61,7 @@
 		</Unit>
 		<Unit filename="src/Drawing/Colors/BouncingColorGenerator.cpp" />
 		<Unit filename="src/Drawing/Colors/BouncingColorGenerator.h" />
-		<Unit filename="src/Drawing/Colors/Color.h" />
+		<Unit filename="src/Drawing/Colors/Color4f.h" />
 		<Unit filename="src/Drawing/Colors/ColorUtil.cpp" />
 		<Unit filename="src/Drawing/Colors/ColorUtil.h" />
 		<Unit filename="src/Drawing/Colors/FilteredColorGenerator.cpp" />
