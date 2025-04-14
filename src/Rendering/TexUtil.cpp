@@ -21,7 +21,6 @@ GLuint CreateTexture(const Field<uint32_t>& field) {
 
 		// Load, create texture and generate mipmaps
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, field.GetWidth(), field.GetHeight(), 0, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8, field.GetData());
-		glGenerateMipmap(GL_TEXTURE_2D);
 	}
 	// Set our texture parameters
 	glBindTexture(GL_TEXTURE_2D, 0); // Unbind texture when done, so we won't accidentily mess up our texture.
@@ -41,7 +40,6 @@ GLuint CreateTexture(const Field<bool>& field) {
 
 		// Load, create texture and generate mipmaps
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, field.GetWidth(), field.GetHeight(), 0, GL_RED, GL_RED_INTEGER, field.GetData());
-		glGenerateMipmap(GL_TEXTURE_2D);
 	}
 	// Set our texture parameters
 	glBindTexture(GL_TEXTURE_2D, 0); // Unbind texture when done, so we won't accidentily mess up our texture.
