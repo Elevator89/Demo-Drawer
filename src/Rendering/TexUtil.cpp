@@ -26,6 +26,12 @@ GLuint CreateTexture(const Field<Color4b>& field) {
 	return newTexture;
 }
 
+void ModifyTexture(GLuint textureId, const Field<Color4b>& field) {
+	glBindTexture(GL_TEXTURE_2D, textureId);
+	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, field.GetWidth(), field.GetHeight(), GL_RGBA, GL_UNSIGNED_BYTE, field.GetData());
+	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
 GLuint CreateTexture(const Field<Color4f>& field) {
 	GLuint newTexture;
 	glGenTextures(1, &newTexture);
@@ -43,6 +49,12 @@ GLuint CreateTexture(const Field<Color4f>& field) {
 	// Set our texture parameters
 	glBindTexture(GL_TEXTURE_2D, 0); // Unbind texture when done, so we won't accidentily mess up our texture.
 	return newTexture;
+}
+
+void ModifyTexture(GLuint textureId, const Field<Color4f>& field) {
+	glBindTexture(GL_TEXTURE_2D, textureId);
+	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, field.GetWidth(), field.GetHeight(), GL_RGBA, GL_FLOAT, field.GetData());
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 GLuint CreateTexture(const Field<uint32_t>& field) {
@@ -64,6 +76,12 @@ GLuint CreateTexture(const Field<uint32_t>& field) {
 	return newTexture;
 }
 
+void ModifyTexture(GLuint textureId, const Field<uint32_t>& field) {
+	glBindTexture(GL_TEXTURE_2D, textureId);
+	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, field.GetWidth(), field.GetHeight(), GL_RGBA, GL_UNSIGNED_INT_8_8_8_8, field.GetData());
+	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
 GLuint CreateTexture(const Field<bool>& field) {
 	GLuint newTexture;
 	glGenTextures(1, &newTexture);
@@ -81,24 +99,6 @@ GLuint CreateTexture(const Field<bool>& field) {
 	// Set our texture parameters
 	glBindTexture(GL_TEXTURE_2D, 0); // Unbind texture when done, so we won't accidentily mess up our texture.
 	return newTexture;
-}
-
-void ModifyTexture(GLuint textureId, const Field<Color4b>& field) {
-	glBindTexture(GL_TEXTURE_2D, textureId);
-	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, field.GetWidth(), field.GetHeight(), GL_RGBA, GL_UNSIGNED_BYTE, field.GetData());
-	glBindTexture(GL_TEXTURE_2D, 0);
-}
-
-void ModifyTexture(GLuint textureId, const Field<Color4f>& field) {
-	glBindTexture(GL_TEXTURE_2D, textureId);
-	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, field.GetWidth(), field.GetHeight(), GL_RGBA, GL_FLOAT, field.GetData());
-	glBindTexture(GL_TEXTURE_2D, 0);
-}
-
-void ModifyTexture(GLuint textureId, const Field<uint32_t>& field) {
-	glBindTexture(GL_TEXTURE_2D, textureId);
-	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, field.GetWidth(), field.GetHeight(), GL_RGBA, GL_UNSIGNED_INT_8_8_8_8, field.GetData());
-	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void ModifyTexture(GLuint textureId, const Field<bool>& field) {
