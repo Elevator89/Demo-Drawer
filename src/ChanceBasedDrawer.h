@@ -8,18 +8,16 @@
 #include "Field.h"
 #include "ITopology.h"
 #include "IColorGenerator.h"
-#include "IPointsTraverser.h"
 
 template <typename TColor>
 class ChanceBasedDrawer
 {
 public:
-	ChanceBasedDrawer(const ITopology* topology, IContainer* container, const IPointsTraverser* pointsTraverser, float chanceToPick, float chanceToPush, IColorGenerator<TColor>* colorGenerator, IColorGenerator<TColor>* containerColorGenerator, float fieldFillBeforeFlush, std::default_random_engine* randomGenerator) :
+	ChanceBasedDrawer(const ITopology* topology, IContainer* container, float chanceToPick, float chanceToPush, IColorGenerator<TColor>* colorGenerator, IColorGenerator<TColor>* containerColorGenerator, float fieldFillBeforeFlush, std::default_random_engine* randomGenerator) :
 		m_topology(topology),
 		m_container(container),
 		m_chanceToPick(chanceToPick),
 		m_chanceToPush(chanceToPush),
-		m_pointsTraverser(pointsTraverser),
 		m_fillingColorGenerator(colorGenerator),
 		m_containerColorGenerator(containerColorGenerator),
 		m_fieldFillBeforeFlush(fieldFillBeforeFlush),
@@ -57,20 +55,36 @@ public:
 		{
 			colorField.SetCell(pointToVisit, m_fillingColorGenerator->GenerateColor());
 
-			std::vector<Point> nextPoints;
-
-			m_pointsTraverser->GetNextPoints(pointToVisit, m_topology, m_visitedPoints, nextPoints);
-
-			for (std::vector<Point>::const_iterator nextPointIt = nextPoints.cbegin(); nextPointIt != nextPoints.cend(); ++nextPointIt)
+			Point pointToUp;
+			if (chanceDistribution(*m_randomGenerator) < m_chanceToPush && m_topology->TryAdd(pointToVisit, Point::Up(), pointToUp) && m_visitedPoints.find(pointToUp) == m_visitedPoints.end())
 			{
-				Point nextPoint = *nextPointIt;
+				m_visitedPoints.insert(pointToUp);
+				m_container->Push(pointToUp);
+				containerField.SetCell(pointToUp, m_containerColorGenerator->GenerateColor());
+			}
 
-				if (chanceDistribution(*m_randomGenerator) < m_chanceToPush) {
-					m_visitedPoints.insert(nextPoint);
+			Point pointToDown;
+			if (chanceDistribution(*m_randomGenerator) < m_chanceToPush && m_topology->TryAdd(pointToVisit, Point::Down(), pointToDown) && m_visitedPoints.find(pointToDown) == m_visitedPoints.end())
+			{
+				m_visitedPoints.insert(pointToDown);
+				m_container->Push(pointToDown);
+				containerField.SetCell(pointToDown, m_containerColorGenerator->GenerateColor());
+			}
 
-					m_container->Push(nextPoint);
-					containerField.SetCell(nextPoint, m_containerColorGenerator->GenerateColor());
-				}
+			Point pointToLeft;
+			if (chanceDistribution(*m_randomGenerator) < m_chanceToPush && m_topology->TryAdd(pointToVisit, Point::Left(), pointToLeft) && m_visitedPoints.find(pointToLeft) == m_visitedPoints.end())
+			{
+				m_visitedPoints.insert(pointToLeft);
+				m_container->Push(pointToLeft);
+				containerField.SetCell(pointToLeft, m_containerColorGenerator->GenerateColor());
+			}
+
+			Point pointToRight;
+			if (chanceDistribution(*m_randomGenerator) < m_chanceToPush && m_topology->TryAdd(pointToVisit, Point::Right(), pointToRight) && m_visitedPoints.find(pointToRight) == m_visitedPoints.end())
+			{
+				m_visitedPoints.insert(pointToRight);
+				m_container->Push(pointToRight);
+				containerField.SetCell(pointToRight, m_containerColorGenerator->GenerateColor());
 			}
 		}
 	}
@@ -84,9 +98,6 @@ public:
 	inline float GetChanceToPush() const { return m_chanceToPush; }
 	inline void SetChanceToPush(float chanceToPush) { m_chanceToPush = chanceToPush; }
 
-	inline const IPointsTraverser* GetPointsTraverser() const { return m_pointsTraverser; }
-	inline void SetPointsTraverser(const IPointsTraverser* pointsTraverser) { m_pointsTraverser = pointsTraverser; }
-
 	inline IContainer* GetContainer() const { return m_container; }
 	inline void SetContainer(IContainer* container) { m_container = container; }
 
@@ -95,7 +106,6 @@ private:
 	IContainer* m_container;
 	float m_chanceToPick;
 	float m_chanceToPush;
-	const IPointsTraverser* m_pointsTraverser;
 	IColorGenerator<TColor>* m_fillingColorGenerator;
 	IColorGenerator<TColor>* m_containerColorGenerator;
 	float m_fieldFillBeforeFlush;

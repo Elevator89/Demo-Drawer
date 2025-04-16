@@ -11,12 +11,8 @@
 #include "ColorGeneration/RecurrentFilteringColorGenerator.h"
 #include "ColorGeneration/FilteredColorGenerator.h"
 #include "ColorGeneration/SingleColorGenerator.h"
-#include "PointTraversal/ChanceBasedPointsTraverser.h"
-#include "PointTraversal/Neighbour4PointsTraverser.h"
 #include "ChanceBasedDrawer.h"
-#include "IPointsTraverser.h"
 #include "ITopology.h"
-#include "PointsTraverserType.h"
 #include "IContainer.h"
 #include "ContainerType.h"
 #include "StackContainer.h"
@@ -30,9 +26,6 @@
 double clamp(double d, double min, double max);
 char* getCmdOption(char** begin, char** end, const std::string& option);
 bool cmdOptionExists(char** begin, char** end, const std::string& option);
-
-void switchPointsTraverser(PointsTraverserType traverserType);
-IPointsTraverser* createPointsTraverser(PointsTraverserType traverserType);
 
 void switchContainer(ContainerType containerType);
 IContainer* createContainer(ContainerType containerType);
@@ -53,9 +46,6 @@ IColorFilter<Color3b>* m_colorFilter;
 ChanceBasedDrawer<Color3b>* m_drawer;
 
 ContainerType m_containerType = ContainerType::Stack;
-
-IPointsTraverser* m_pointsTraverser;
-PointsTraverserType m_pointsTraverserType = PointsTraverserType::Neighbour4;
 
 IColorGenerator<Color3b>* m_fillingColorGenerator;
 IColorGenerator<Color3b>* m_containerColorGenerator;
@@ -181,10 +171,8 @@ int main(int argc, char* argv[])
 
 	m_randomGenerator = new std::default_random_engine();
 
-	m_pointsTraverser = createPointsTraverser(m_pointsTraverserType);
-
 	//m_drawer = new QueuePushWithChanceDrawer(m_topology, m_colorGenerator, 0.5f, 0.95f);
-	m_drawer = new ChanceBasedDrawer<Color3b>(m_topology, new StackContainer(), m_pointsTraverser, 0.7, 0.7, m_fillingColorGenerator, m_containerColorGenerator, 0.95f, m_randomGenerator);
+	m_drawer = new ChanceBasedDrawer<Color3b>(m_topology, new StackContainer(), 0.7, 0.7, m_fillingColorGenerator, m_containerColorGenerator, 0.95f, m_randomGenerator);
 
 	Field<Color3b> backgroundField(m_width, m_height, Color3b::Black());
 	Field<Color3b> foregroundField(m_width, m_height, Color3b::Black());
@@ -318,10 +306,6 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 			switchContainer(ContainerType::Stack);
 		if (key == GLFW_KEY_2)
 			switchContainer(ContainerType::Queue);
-		if (key == GLFW_KEY_Q)
-			switchPointsTraverser(PointsTraverserType::Neighbour4);
-		if (key == GLFW_KEY_W)
-			switchPointsTraverser(PointsTraverserType::Neighbour4WithChance);
 	}
 }
 
@@ -336,30 +320,6 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 void error_callback(int error, const char* description)
 {
 	fprintf(stderr, "Error: %s\n", description);
-}
-
-void switchPointsTraverser(PointsTraverserType traverserType)
-{
-	if (m_pointsTraverserType == traverserType) return;
-	m_pointsTraverserType = traverserType;
-
-	delete m_pointsTraverser;
-	m_pointsTraverser = createPointsTraverser(m_pointsTraverserType);
-	m_drawer->SetPointsTraverser(m_pointsTraverser);
-}
-
-IPointsTraverser* createPointsTraverser(PointsTraverserType traverserType)
-{
-	IPointsTraverser* neighbour4PointsTraverser = new Neighbour4PointsTraverser();
-
-	switch (traverserType)
-	{
-	case PointsTraverserType::Neighbour4WithChance:
-		return new ChanceBasedPointsTraverser(neighbour4PointsTraverser, m_randomGenerator, 0.59f);
-	case PointsTraverserType::Neighbour4:
-	default:
-		return neighbour4PointsTraverser;
-	}
 }
 
 void switchContainer(ContainerType containerType)
