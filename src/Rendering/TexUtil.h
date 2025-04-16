@@ -2,15 +2,18 @@
 
 #include <glad/gl.h>
 #include <stdint.h>
+#include "../Color3b.h"
 #include "../Color4b.h"
 #include "../Color4f.h"
 #include "../Field.h"
 
+GLuint CreateTexture(const Field<Color3b>& field);
 GLuint CreateTexture(const Field<Color4b>& field);
 GLuint CreateTexture(const Field<Color4f>& field);
 GLuint CreateTexture(const Field<uint32_t>& field);
 GLuint CreateTexture(const Field<bool>& field);
 
+void ModifyTexture(GLuint textureId, const Field<Color3b>& field);
 void ModifyTexture(GLuint textureId, const Field<Color4b>& field);
 void ModifyTexture(GLuint textureId, const Field<Color4f>& field);
 void ModifyTexture(GLuint textureId, const Field<uint32_t>& field);

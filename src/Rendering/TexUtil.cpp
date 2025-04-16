@@ -7,6 +7,31 @@
 
 using namespace std;
 
+GLuint CreateTexture(const Field<Color3b>& field) {
+	GLuint newTexture;
+	glGenTextures(1, &newTexture);
+	glBindTexture(GL_TEXTURE_2D, newTexture); // All upcoming GL_TEXTURE_2D operations now have effect on our texture object
+	{
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// Set texture wrapping to GL_REPEAT
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		// Set texture filtering
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+		// Load, create texture and generate mipmaps
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, field.GetWidth(), field.GetHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, field.GetData());
+	}
+	// Set our texture parameters
+	glBindTexture(GL_TEXTURE_2D, 0); // Unbind texture when done, so we won't accidentily mess up our texture.
+	return newTexture;
+}
+
+void ModifyTexture(GLuint textureId, const Field<Color3b>& field) {
+	glBindTexture(GL_TEXTURE_2D, textureId);
+	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, field.GetWidth(), field.GetHeight(), GL_RGB, GL_UNSIGNED_BYTE, field.GetData());
+	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
 GLuint CreateTexture(const Field<Color4b>& field) {
 	GLuint newTexture;
 	glGenTextures(1, &newTexture);

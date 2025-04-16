@@ -1,6 +1,8 @@
 target_sources( DemoDrawer PUBLIC
     "ColorGeneration/Bouncing.h"
     "ColorGeneration/Bouncing.cpp"
+    "ColorGeneration/BouncingColor3bFilter.h"
+    "ColorGeneration/BouncingColor3bFilter.cpp"
     "ColorGeneration/BouncingColor4bFilter.h"
     "ColorGeneration/BouncingColor4bFilter.cpp"
     "ColorGeneration/BouncingColor4fFilter.h"
@@ -31,6 +33,8 @@ target_sources( DemoDrawer PUBLIC
     "Topologies/ThorusTopology.cpp"
     "IPointsTraverser.h"
     "ChanceBasedDrawer.h"
+    "Color3b.h"
+    "Color3b.cpp"
     "Color4b.h"
     "Color4b.cpp"
     "Color4f.h"
@@ -49,5 +53,4 @@ target_sources( DemoDrawer PUBLIC
     "ITopology.h"
     "OutOfRangeException.h"
     "Point.h"
-    "Point.cpp"
-)
+    "Point.cpp")
