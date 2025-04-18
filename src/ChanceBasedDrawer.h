@@ -1,7 +1,8 @@
 #pragma once
 
 #include <unordered_set>
-#include <list>
+#include <vector>
+#include <algorithm>
 #include <random>
 #include "IContainer.h"
 #include "Point.h"
@@ -21,7 +22,8 @@ public:
 		m_fillingColorGenerator(colorGenerator),
 		m_containerColorGenerator(containerColorGenerator),
 		m_fieldFillBeforeFlush(fieldFillBeforeFlush),
-		m_randomGenerator(randomGenerator)
+		m_randomGenerator(randomGenerator),
+		m_directions{ Point::Up(), Point::Down(), Point::Left(), Point::Right() }
 	{
 	}
 
@@ -55,36 +57,17 @@ public:
 		{
 			colorField.SetCell(pointToVisit, m_fillingColorGenerator->GenerateColor());
 
-			Point pointToUp;
-			if (chanceDistribution(*m_randomGenerator) < m_chanceToPush && m_topology->TryAdd(pointToVisit, Point::Up(), pointToUp) && m_visitedPoints.find(pointToUp) == m_visitedPoints.end())
-			{
-				m_visitedPoints.insert(pointToUp);
-				m_container->Push(pointToUp);
-				containerField.SetCell(pointToUp, m_containerColorGenerator->GenerateColor());
-			}
+			std::shuffle(m_directions.begin(), m_directions.end(), *m_randomGenerator);
 
-			Point pointToDown;
-			if (chanceDistribution(*m_randomGenerator) < m_chanceToPush && m_topology->TryAdd(pointToVisit, Point::Down(), pointToDown) && m_visitedPoints.find(pointToDown) == m_visitedPoints.end())
+			for (Point direction : m_directions)
 			{
-				m_visitedPoints.insert(pointToDown);
-				m_container->Push(pointToDown);
-				containerField.SetCell(pointToDown, m_containerColorGenerator->GenerateColor());
-			}
-
-			Point pointToLeft;
-			if (chanceDistribution(*m_randomGenerator) < m_chanceToPush && m_topology->TryAdd(pointToVisit, Point::Left(), pointToLeft) && m_visitedPoints.find(pointToLeft) == m_visitedPoints.end())
-			{
-				m_visitedPoints.insert(pointToLeft);
-				m_container->Push(pointToLeft);
-				containerField.SetCell(pointToLeft, m_containerColorGenerator->GenerateColor());
-			}
-
-			Point pointToRight;
-			if (chanceDistribution(*m_randomGenerator) < m_chanceToPush && m_topology->TryAdd(pointToVisit, Point::Right(), pointToRight) && m_visitedPoints.find(pointToRight) == m_visitedPoints.end())
-			{
-				m_visitedPoints.insert(pointToRight);
-				m_container->Push(pointToRight);
-				containerField.SetCell(pointToRight, m_containerColorGenerator->GenerateColor());
+				Point pointAtDirection;
+				if (chanceDistribution(*m_randomGenerator) < m_chanceToPush && m_topology->TryAdd(pointToVisit, direction, pointAtDirection) && m_visitedPoints.find(pointAtDirection) == m_visitedPoints.end())
+				{
+					m_visitedPoints.insert(pointAtDirection);
+					m_container->Push(pointAtDirection);
+					containerField.SetCell(pointAtDirection, m_containerColorGenerator->GenerateColor());
+				}
 			}
 		}
 	}
@@ -112,4 +95,5 @@ private:
 
 	std::default_random_engine* m_randomGenerator;
 	std::unordered_set<Point> m_visitedPoints;
+	std::vector<Point> m_directions;
 };
